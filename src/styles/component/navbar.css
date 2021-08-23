@@ -1,0 +1,23 @@
+.navbar_container {
+  padding: 2rem;
+  height: 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar_container ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar_container button {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  font-family: var(--ft);
+  font-weight: var(--ft-medium);
+  font-size: inherit;
+  cursor: pointer;
+}
