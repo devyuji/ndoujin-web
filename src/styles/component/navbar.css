@@ -2,8 +2,10 @@
   padding: 2rem;
   height: 5rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .navbar_container ul {
@@ -20,4 +22,11 @@
   font-weight: var(--ft-medium);
   font-size: inherit;
   cursor: pointer;
+}
+
+@media (min-width: 400px) {
+  .navbar_container {
+    flex-direction: row;
+    margin-bottom: 0;
+  }
 }

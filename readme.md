@@ -1,15 +1,19 @@
 ## ND - Easiest Way To Find Nhentai
 
+[ndoujin-server - repository](https://github.com/devyuji/ndoujin-server)
+
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/devyuji/ndoujin-app.git
+cd ndoujin-app/
+yarn or npm install
 ```
 
 ## Usage
 
-```python
-python api.py
+```npm or yarn
+npm run start or yarn start
 ```
 
 ## Contributing

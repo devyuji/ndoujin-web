@@ -12,7 +12,23 @@ const Navbar: FC = () => {
         </li>
 
         <li>
-          <a href="https://instagram.com/devyuji">instagram</a>
+          <a
+            href="https://github.com/devyuji/ndoujin-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            github
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="https://instagram.com/devyuji"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            instagram
+          </a>
         </li>
       </ul>
     </header>
