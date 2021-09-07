@@ -9,13 +9,13 @@ import Navbar from "../components/navbar";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { CARD_SHOW_ACTION, DATA_ACTION } from "../redux/action";
+import { CARD_SHOW_ACTION, DATA_ACTION, LOADING_ACTION } from "../redux/action";
 
 const Home: FC = () => {
   const [value, setValue] = useState("");
   const DATA = useSelector((s: any) => s.DATA);
   const show = useSelector((s: any) => s.SHOW);
-  const [loading, setLoading] = useState(false);
+  const loading = useSelector((s: any) => s.LOADING);
   const [error, setError] = useState(false);
 
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const Home: FC = () => {
   const fetchApi = async (e: any) => {
     e.preventDefault();
     if (value) {
-      setLoading(true);
+      dispatch(LOADING_ACTION(true));
       const id = value.trim();
       try {
         const { data } = await axios.post(process.env.REACT_APP_API_URL!, {
@@ -39,7 +39,7 @@ const Home: FC = () => {
 
         setError(true);
       }
-      setLoading(false);
+      dispatch(LOADING_ACTION(false));
     }
   };
 

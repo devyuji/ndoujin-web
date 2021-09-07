@@ -11,3 +11,10 @@ export const CARD_SHOW_ACTION = (payload : boolean) => {
         payload
     }
 }
+
+export const LOADING_ACTION = (payload : boolean) => {
+    return {
+        type : "LOADING",
+        payload,
+    }
+}

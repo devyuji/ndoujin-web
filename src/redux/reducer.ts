@@ -12,3 +12,10 @@ export const CARD_SHOW_REDUCER = (state = false, action : any) => {
         default : return state;
     }
 }
+
+export const LOADING_REDUCER = (state = false, action : any) => {
+    switch(action.type) {
+        case "LOADING" : return state = action.payload;
+        default: return state;
+    }
+}
