@@ -32,6 +32,7 @@ const Home: FC = () => {
         setError(false);
         dispatch(DATA_ACTION(data));
         !show && dispatch(CARD_SHOW_ACTION(true));
+        setValue("");
       } catch (err) {
         console.error("error = ", err);
         dispatch(DATA_ACTION({}));
@@ -61,8 +62,13 @@ const Home: FC = () => {
             <button type="submit">go</button>
           </form>
         </div>
-        {loading && <h2>loading...</h2>}
-        {show && <Card data={DATA} />}
+        {loading && <h2>searching...</h2>}
+        {show && (
+          <>
+            <p className="code">#{DATA.id}</p>
+            <Card data={DATA} />
+          </>
+        )}
         {error && <h2>Not Found!</h2>}
       </main>
 

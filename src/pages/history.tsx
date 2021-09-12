@@ -1,8 +1,10 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import "../styles/pages/history.css";
+
+// components
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
-import "../styles/pages/history.css";
 
 const History: FC = () => {
   const lists = useRef<any>([]);

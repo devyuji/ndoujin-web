@@ -1,5 +1,7 @@
 ## ND - Easiest Way To Find Nhentai
 
+![](/public/screenshot.png)
+
 [ndoujin-server - repository](https://github.com/devyuji/ndoujin-server)
 
 ## Installation

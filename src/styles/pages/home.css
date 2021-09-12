@@ -60,8 +60,16 @@ input[type="number"] {
   cursor: pointer;
 }
 
+.code {
+  width: 90%;
+}
+
 @media (min-width: 800px) {
   .home_container .box {
+    width: 40rem;
+  }
+
+  .code {
     width: 40rem;
   }
 }
