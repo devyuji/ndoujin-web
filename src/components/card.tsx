@@ -11,7 +11,7 @@ const Card: FC<CardProps> = ({ data }) => {
     list = JSON.parse(list);
 
     list.push(data.id);
-    if (list.length > 200) list.shift();
+    if (list.length > 500) list.shift();
 
     localStorage.setItem("history", JSON.stringify(list));
 

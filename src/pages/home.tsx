@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../styles/pages/home.css";
 
@@ -17,8 +17,13 @@ const Home: FC = () => {
   const show = useSelector((s: any) => s.SHOW);
   const loading = useSelector((s: any) => s.LOADING);
   const [error, setError] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const fetchApi = async (e: any) => {
     e.preventDefault();
@@ -54,6 +59,7 @@ const Home: FC = () => {
           </div>
           <form onSubmit={fetchApi} className="form">
             <input
+              ref={inputRef}
               type="number"
               placeholder="e.g. #123456"
               value={value}
