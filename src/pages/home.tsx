@@ -9,10 +9,15 @@ import Navbar from "../components/navbar";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { CARD_SHOW_ACTION, DATA_ACTION, LOADING_ACTION } from "../redux/action";
+import {
+  CARD_SHOW_ACTION,
+  DATA_ACTION,
+  LOADING_ACTION,
+  USER_INPUT_ACTION,
+} from "../redux/action";
 
 const Home: FC = () => {
-  const [value, setValue] = useState("");
+  const value = useSelector((s: any) => s.USER_INPUT);
   const DATA = useSelector((s: any) => s.DATA);
   const show = useSelector((s: any) => s.SHOW);
   const loading = useSelector((s: any) => s.LOADING);
@@ -37,7 +42,7 @@ const Home: FC = () => {
         setError(false);
         dispatch(DATA_ACTION(data));
         !show && dispatch(CARD_SHOW_ACTION(true));
-        setValue("");
+        dispatch(USER_INPUT_ACTION(""));
       } catch (err) {
         console.error("error = ", err);
         dispatch(DATA_ACTION({}));
@@ -63,7 +68,9 @@ const Home: FC = () => {
               type="number"
               placeholder="e.g. #123456"
               value={value}
-              onChange={(text) => setValue(text.target.value)}
+              onChange={(text) =>
+                dispatch(USER_INPUT_ACTION(text.target.value))
+              }
             />
             <button type="submit">go</button>
           </form>
