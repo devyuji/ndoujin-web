@@ -25,3 +25,10 @@ export const USER_INPUT_ACTION = (payload: String) => {
     payload,
   };
 };
+
+export const SELECTED_PAGE_ACTION = (payload: number) => {
+  return {
+    type: "PAGE",
+    payload,
+  };
+};

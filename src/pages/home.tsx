@@ -6,6 +6,7 @@ import "../styles/pages/home.css";
 import Card from "../components/card";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
+import Loading from "../components/loading";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -75,7 +76,7 @@ const Home: FC = () => {
             <button type="submit">go</button>
           </form>
         </div>
-        {loading && <h2>searching...</h2>}
+        {loading && <Loading />}
         {show && (
           <>
             <p className="code">#{DATA.id}</p>

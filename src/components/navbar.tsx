@@ -12,6 +12,10 @@ const Navbar: FC = () => {
         </li>
 
         <li>
+          <Link to="/search">search</Link>
+        </li>
+
+        <li>
           <a
             href="https://github.com/devyuji/ndoujin-app"
             target="_blank"

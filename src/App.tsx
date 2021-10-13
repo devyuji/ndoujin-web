@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
-import Home from "./pages/home";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Home from "./pages/home";
+import Search from "./pages/search";
 import History from "./pages/history";
 
 const App: FC = () => {
@@ -15,6 +16,7 @@ const App: FC = () => {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/search" exact component={Search} />
           <Route path="/history" exact component={History} />
           <Route path="*" component={RedirectHome} />
         </Switch>

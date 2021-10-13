@@ -2,17 +2,6 @@
   padding: 2rem;
 }
 
-.history_container .back {
-  position: sticky;
-  top: 20px;
-}
-
-.history_container .back .icon_back {
-  background-color: var(--primary-clr);
-  padding: 0.5rem;
-  border-radius: 100%;
-}
-
 .history_container .content {
   margin: 3rem 0 2rem;
   display: grid;

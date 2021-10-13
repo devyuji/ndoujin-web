@@ -3,6 +3,7 @@ import {
   CARD_SHOW_REDUCER,
   DATA_REDUCER,
   LOADING_REDUCER,
+  SELECTED_PAGE_REDUCER,
   USER_INPUT_REDUCER,
 } from "./reducer";
 
@@ -11,6 +12,7 @@ const reducers = combineReducers({
   SHOW: CARD_SHOW_REDUCER,
   LOADING: LOADING_REDUCER,
   USER_INPUT: USER_INPUT_REDUCER,
+  SELECTED_PAGE: SELECTED_PAGE_REDUCER,
 });
 
 export const store = createStore(

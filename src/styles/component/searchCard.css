@@ -1,0 +1,55 @@
+.search_card_container {
+  padding: 1rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 2rem;
+}
+
+.search_card_container .card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 10px 5px rgba(0, 0, 0, 0.2);
+  border: none;
+  background-color: var(--background-clr);
+  color: white;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.search_card_container .card .title {
+  padding: 0.5rem;
+  font-size: 0.6rem;
+}
+
+.search_card_container .card .lang {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 1rem;
+  background-color: var(--primary-clr);
+  border-bottom-left-radius: 20px;
+  font-weight: var(--ft-bold);
+  text-transform: uppercase;
+}
+
+.pagination {
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.pagination button {
+  border: none;
+  color: white;
+  background-color: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 20%;
+}
+
+.pagination .selected {
+  background-color: var(--primary-clr);
+}

@@ -33,7 +33,14 @@ const Card: FC<CardProps> = ({ data }) => {
         {data.tags && (
           <div className="tags">
             {data.tags.map((d: string | number, index: number) => (
-              <p key={index}>{d}</p>
+              <p
+                key={index}
+                style={{
+                  color: d === "netorare" || d === "cheating" ? "red" : "white",
+                }}
+              >
+                {d}
+              </p>
             ))}
           </div>
         )}

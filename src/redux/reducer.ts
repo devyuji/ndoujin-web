@@ -34,3 +34,12 @@ export const USER_INPUT_REDUCER = (state = "", action: any) => {
       return state;
   }
 };
+
+export const SELECTED_PAGE_REDUCER = (state = 1, action: any) => {
+  switch (action.type) {
+    case "PAGE":
+      return (state = action.payload);
+    default:
+      return state;
+  }
+};
