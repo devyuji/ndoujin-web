@@ -2,7 +2,6 @@ import axios from "axios";
 import { FC, useState } from "react";
 
 // components
-import Back from "../components/back";
 import Footer from "../components/footer";
 import Loading from "../components/loading";
 import Navbar from "../components/navbar";
@@ -14,6 +13,7 @@ import { SELECTED_PAGE_ACTION } from "../redux/action";
 
 // styles
 import "../styles/pages/search.css";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Search: FC = () => {
   const [value, setValue] = useState("");
@@ -79,11 +79,11 @@ const Search: FC = () => {
     <>
       <Navbar />
 
-      <div style={{ padding: "1rem 2rem" }}>
+      {/* <div style={{ padding: "1rem 2rem" }}>
         <Back />
-      </div>
+      </div> */}
 
-      <div className="search_container">
+      <main className="search_container">
         <div className="box">
           <div className="tagline">
             <h1>Advance search (BETA)</h1>
@@ -124,59 +124,66 @@ const Search: FC = () => {
               </button>
 
               {/* filters */}
-              {filterShow && (
-                <div className="filter">
-                  <h2>Language :</h2>
-                  <div className="language">
-                    <input
-                      type="checkbox"
-                      id="all"
-                      name="all"
-                      value="all"
-                      checked={language === "all"}
-                      onChange={filter}
-                    />
-                    <label htmlFor="all">All</label>
+              <AnimatePresence>
+                {filterShow && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="filter"
+                  >
+                    <h2>Language :</h2>
+                    <div className="language">
+                      <input
+                        type="checkbox"
+                        id="all"
+                        name="all"
+                        value="all"
+                        checked={language === "all"}
+                        onChange={filter}
+                      />
+                      <label htmlFor="all">All</label>
 
-                    <input
-                      type="checkbox"
-                      id="english"
-                      name="english"
-                      checked={language === "english"}
-                      value="english"
-                      onChange={filter}
-                    />
-                    <label htmlFor="english">English (EN)</label>
+                      <input
+                        type="checkbox"
+                        id="english"
+                        name="english"
+                        checked={language === "english"}
+                        value="english"
+                        onChange={filter}
+                      />
+                      <label htmlFor="english">English (EN)</label>
 
-                    <input
-                      type="checkbox"
-                      id="japanese"
-                      name="japanese"
-                      checked={language === "japanese"}
-                      value="japanese"
-                      onChange={filter}
-                    />
-                    <label htmlFor="japanese">Japanese (JA)</label>
+                      <input
+                        type="checkbox"
+                        id="japanese"
+                        name="japanese"
+                        checked={language === "japanese"}
+                        value="japanese"
+                        onChange={filter}
+                      />
+                      <label htmlFor="japanese">Japanese (JA)</label>
 
-                    <input
-                      type="checkbox"
-                      id="chinese"
-                      name="chinese"
-                      checked={language === "chinese"}
-                      value="chinese"
-                      onChange={filter}
-                    />
-                    <label htmlFor="chinese">Chinese (CH)</label>
-                  </div>
-                </div>
-              )}
+                      <input
+                        type="checkbox"
+                        id="chinese"
+                        name="chinese"
+                        checked={language === "chinese"}
+                        value="chinese"
+                        onChange={filter}
+                      />
+                      <label htmlFor="chinese">Chinese (CH)</label>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </form>
         </div>
         {loading && <Loading />}
         {error && <h2>Not Found!</h2>}
         {show && <Card data={DATA} page={page} callApi={callApi} />}
-      </div>
+      </main>
 
       <Footer />
     </>

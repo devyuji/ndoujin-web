@@ -1,7 +1,7 @@
 .search_card_container {
   padding: 1rem 2rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 2rem;
 }
 
@@ -37,7 +37,8 @@
 .pagination {
   padding: 1rem 2rem;
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .pagination button {
@@ -52,4 +53,10 @@
 
 .pagination .selected {
   background-color: var(--primary-clr);
+}
+
+@media (max-width: 800px) {
+  .search_card_container {
+    padding: 1rem;
+  }
 }

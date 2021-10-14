@@ -1,12 +1,25 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/component/navbar.css";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar: FC = () => {
-  return (
-    <header className="navbar_container">
-      <h1>nd</h1>
-      <ul>
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  }, [open]);
+
+  const UlItems: FC = () => {
+    return (
+      <>
+        <li>
+          <Link to="/">home</Link>
+        </li>
         <li>
           <Link to="/history">history</Link>
         </li>
@@ -34,7 +47,42 @@ const Navbar: FC = () => {
             instagram
           </a>
         </li>
+      </>
+    );
+  };
+
+  return (
+    <header className="navbar_container">
+      <h1>nd</h1>
+      <button className="hamburger" onClick={() => setOpen(!open)}>
+        <svg
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <ul className="list">
+        <UlItems />
       </ul>
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            className="mobile_list"
+          >
+            <UlItems />
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

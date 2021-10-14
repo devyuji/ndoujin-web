@@ -1,4 +1,5 @@
 .search_container {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,6 +8,10 @@
 
 .search_container .box {
   width: 90%;
+}
+
+.search_container .tagline {
+  margin-bottom: 1rem;
 }
 
 .search_container .tagline h1 {
@@ -65,7 +70,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* gap: 0.5em; */
+  flex-wrap: wrap;
+  gap: 0.5em;
 }
 
 @media (min-width: 800px) {
