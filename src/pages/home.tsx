@@ -9,49 +9,50 @@ import Navbar from "../components/navbar";
 import Loading from "../components/loading";
 
 // redux
-import { useDispatch, useSelector } from "react-redux";
-import {
-  CARD_SHOW_ACTION,
-  DATA_ACTION,
-  LOADING_ACTION,
-  USER_INPUT_ACTION,
-} from "../redux/action";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { RESET_DATA, SET_DATA } from "../redux/reducers/dataReducer";
+import { CLEAR_INPUT, SET_INPUT } from "../redux/reducers/inputReducer";
+import { START_LOADING, STOP_LOADING } from "../redux/reducers/loadingReducer";
+import { HIDE_CARD, SHOW_CARD } from "../redux/reducers/cardVisibleReducer";
 
 const Home: FC = () => {
-  const value = useSelector((s: any) => s.USER_INPUT);
-  const DATA = useSelector((s: any) => s.DATA);
-  const show = useSelector((s: any) => s.SHOW);
-  const loading = useSelector((s: any) => s.LOADING);
+  const value = useAppSelector((state) => state.INPUT);
+  const DATA = useAppSelector((state) => state.DATA);
+  const isCardVisible = useAppSelector((state) => state.IS_CARD_VISIBLE);
+  const loading = useAppSelector((state) => state.LOADING);
   const [error, setError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     inputRef.current?.focus();
+    if (value) buttonRef.current?.click();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchApi = async (e: any) => {
     e.preventDefault();
     if (value) {
-      dispatch(LOADING_ACTION(true));
+      dispatch(START_LOADING());
       const id = value.trim();
       try {
         const { data } = await axios.post(process.env.REACT_APP_API_URL!, {
           id,
         });
         setError(false);
-        dispatch(DATA_ACTION(data));
-        !show && dispatch(CARD_SHOW_ACTION(true));
-        dispatch(USER_INPUT_ACTION(""));
+        dispatch(SET_DATA(data));
+        !isCardVisible && dispatch(SHOW_CARD());
+        dispatch(CLEAR_INPUT());
       } catch (err) {
         console.error("error = ", err);
-        dispatch(DATA_ACTION({}));
-        dispatch(CARD_SHOW_ACTION(false));
+        dispatch(RESET_DATA());
+        dispatch(HIDE_CARD());
 
         setError(true);
       }
-      dispatch(LOADING_ACTION(false));
+      dispatch(STOP_LOADING());
     }
   };
 
@@ -69,15 +70,15 @@ const Home: FC = () => {
               type="number"
               placeholder="e.g. #123456"
               value={value}
-              onChange={(text) =>
-                dispatch(USER_INPUT_ACTION(text.target.value))
-              }
+              onChange={(text) => dispatch(SET_INPUT(text.target.value))}
             />
-            <button type="submit">go</button>
+            <button type="submit" ref={buttonRef}>
+              go
+            </button>
           </form>
         </div>
         {loading && <Loading />}
-        {show && (
+        {isCardVisible && (
           <>
             <p className="code">#{DATA.id}</p>
             <Card data={DATA} />

@@ -1,22 +1,22 @@
-import { combineReducers, createStore } from "redux";
-import {
-  CARD_SHOW_REDUCER,
-  DATA_REDUCER,
-  LOADING_REDUCER,
-  SELECTED_PAGE_REDUCER,
-  USER_INPUT_REDUCER,
-} from "./reducer";
+import { configureStore } from "@reduxjs/toolkit";
 
-const reducers = combineReducers({
-  DATA: DATA_REDUCER,
-  SHOW: CARD_SHOW_REDUCER,
-  LOADING: LOADING_REDUCER,
-  USER_INPUT: USER_INPUT_REDUCER,
-  SELECTED_PAGE: SELECTED_PAGE_REDUCER,
+// reducers
+import DATA_REDUCER from "./reducers/dataReducer";
+import INPUT_REDUCER from "./reducers/inputReducer";
+import LOADING_REDUCER from "./reducers/loadingReducer";
+import CARD_VISIBLE_REDUCER from "./reducers/cardVisibleReducer";
+import SELECTED_PAGE_REDUCER from "./reducers/selectedPageReducer";
+
+export const store = configureStore({
+  reducer: {
+    DATA: DATA_REDUCER,
+    INPUT: INPUT_REDUCER,
+    LOADING: LOADING_REDUCER,
+    IS_CARD_VISIBLE: CARD_VISIBLE_REDUCER,
+    SELECTED_PAGE: SELECTED_PAGE_REDUCER,
+  },
+  devTools: process.env.NODE_ENV !== "production",
 });
 
-export const store = createStore(
-  reducers,
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
-);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

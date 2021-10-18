@@ -1,8 +1,9 @@
 import { FC } from "react";
+import { dataType } from "../redux/reducers/dataReducer";
 import "../styles/component/card.css";
 
 interface CardProps {
-  data: any;
+  data: dataType;
 }
 
 const Card: FC<CardProps> = ({ data }) => {
@@ -32,7 +33,7 @@ const Card: FC<CardProps> = ({ data }) => {
         {/* tags */}
         {data.tags && (
           <div className="tags">
-            {data.tags.map((d: string | number, index: number) => (
+            {data.tags.map((d: String, index: number) => (
               <p
                 key={index}
                 style={{

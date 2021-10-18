@@ -1,27 +1,35 @@
 import { FC } from "react";
-import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { SET_INPUT } from "../redux/reducers/inputReducer";
 import "../styles/component/searchCard.css";
 
 interface CardProps {
   data: any;
   page: number;
+  artistName: String;
   callApi: (p: number) => void;
 }
 
-const Card: FC<CardProps> = ({ data, page, callApi }) => {
-  const selectedPage = useSelector((s: any) => s.SELECTED_PAGE);
+const Card: FC<CardProps> = ({ data, page, callApi, artistName }) => {
+  const selectedPage = useAppSelector((state) => state.SELECTED_PAGE);
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
   return (
     <>
+      <h1 className="artist_name">Search Result : {artistName}</h1>
       <div className="search_card_container">
         {data.map((d: any, index: Number) => {
           const lang = d.language.slice(0, 2);
           return (
-            <a
-              href={`https://nhentai.net${d.link}/1`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
               className="card"
               key={`${index}`}
+              onClick={() => {
+                dispatch(SET_INPUT(d.link));
+                history.push("/");
+              }}
             >
               <div className="image_container">
                 <img src={`data:image/png;base64,${d.image}`} alt="" />
@@ -32,7 +40,7 @@ const Card: FC<CardProps> = ({ data, page, callApi }) => {
               <div className="lang">
                 <p>{lang}</p>
               </div>
-            </a>
+            </button>
           );
         })}
       </div>
@@ -41,7 +49,11 @@ const Card: FC<CardProps> = ({ data, page, callApi }) => {
           <button
             type="button"
             key={`${index}`}
-            onClick={() => callApi(index + 1)}
+            onClick={() => {
+              document.body.scrollTop = 0;
+              document.documentElement.scrollTop = 0;
+              callApi(index + 1);
+            }}
             className={selectedPage === index + 1 ? "selected" : ""}
           >
             {index + 1}

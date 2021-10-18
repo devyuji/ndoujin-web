@@ -1,19 +1,20 @@
 import axios from "axios";
 import { FC, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 // components
 import Footer from "../components/footer";
 import Loading from "../components/loading";
 import Navbar from "../components/navbar";
+import Filters from "../components/filters";
 import Card from "../components/searchCard";
 
 // redux
-import { useDispatch } from "react-redux";
-import { SELECTED_PAGE_ACTION } from "../redux/action";
+import { CHANGE_PAGE } from "../redux/reducers/selectedPageReducer";
+import { useAppDispatch } from "../redux/hooks";
 
 // styles
 import "../styles/pages/search.css";
-import { AnimatePresence, motion } from "framer-motion";
 
 const Search: FC = () => {
   const [value, setValue] = useState("");
@@ -25,12 +26,13 @@ const Search: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [filterShow, setFilterShow] = useState<boolean>(false);
+  const [artistName, setArtistName] = useState("");
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const fetchApi = async (e: any) => {
+  const fetchApi = (e: any) => {
     e.preventDefault();
-    dispatch(SELECTED_PAGE_ACTION(1));
+    dispatch(CHANGE_PAGE(1));
     callApi(1);
   };
 
@@ -47,8 +49,9 @@ const Search: FC = () => {
         setData(data.data);
         setRealData(data.data);
         setPage(data.pagination);
-        dispatch(SELECTED_PAGE_ACTION(p));
+        dispatch(CHANGE_PAGE(p));
         setLanguage("all");
+        setArtistName(value);
         !show && setShow(true);
         error && setError(false);
       } catch (err) {
@@ -78,10 +81,6 @@ const Search: FC = () => {
   return (
     <>
       <Navbar />
-
-      {/* <div style={{ padding: "1rem 2rem" }}>
-        <Back />
-      </div> */}
 
       <main className="search_container">
         <div className="box">
@@ -125,64 +124,21 @@ const Search: FC = () => {
 
               {/* filters */}
               <AnimatePresence>
-                {filterShow && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className="filter"
-                  >
-                    <h2>Language :</h2>
-                    <div className="language">
-                      <input
-                        type="checkbox"
-                        id="all"
-                        name="all"
-                        value="all"
-                        checked={language === "all"}
-                        onChange={filter}
-                      />
-                      <label htmlFor="all">All</label>
-
-                      <input
-                        type="checkbox"
-                        id="english"
-                        name="english"
-                        checked={language === "english"}
-                        value="english"
-                        onChange={filter}
-                      />
-                      <label htmlFor="english">English (EN)</label>
-
-                      <input
-                        type="checkbox"
-                        id="japanese"
-                        name="japanese"
-                        checked={language === "japanese"}
-                        value="japanese"
-                        onChange={filter}
-                      />
-                      <label htmlFor="japanese">Japanese (JA)</label>
-
-                      <input
-                        type="checkbox"
-                        id="chinese"
-                        name="chinese"
-                        checked={language === "chinese"}
-                        value="chinese"
-                        onChange={filter}
-                      />
-                      <label htmlFor="chinese">Chinese (CH)</label>
-                    </div>
-                  </motion.div>
-                )}
+                {filterShow && <Filters language={language} filter={filter} />}
               </AnimatePresence>
             </div>
           </form>
         </div>
         {loading && <Loading />}
         {error && <h2>Not Found!</h2>}
-        {show && <Card data={DATA} page={page} callApi={callApi} />}
+        {show && (
+          <Card
+            data={DATA}
+            page={page}
+            callApi={callApi}
+            artistName={artistName}
+          />
+        )}
       </main>
 
       <Footer />

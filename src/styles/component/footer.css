@@ -3,3 +3,14 @@
   padding: 1rem;
   text-align: center;
 }
+
+.footer p {
+  font-size: 1rem;
+  font-weight: var(--ft-medium);
+  margin-bottom: 0.5rem;
+}
+
+.footer a {
+  /* padding-bottom: 0.5em; */
+  border-bottom: 1px solid var(--primary-clr);
+}

@@ -2,7 +2,7 @@
 
 ![](/public/screenshot.png)
 
-[ndoujin-server - repository](https://github.com/devyuji/ndoujin-server)
+[server - repository](https://github.com/devyuji/ndoujin-server)
 
 ## Installation
 
