@@ -6,6 +6,9 @@ import INPUT_REDUCER from "./reducers/inputReducer";
 import LOADING_REDUCER from "./reducers/loadingReducer";
 import CARD_VISIBLE_REDUCER from "./reducers/cardVisibleReducer";
 import SELECTED_PAGE_REDUCER from "./reducers/selectedPageReducer";
+import SEARCH_DATA_REDUCER from "./reducers/searchDataReducer";
+import SEARCH_INPUT_REDUCER from "./reducers/searchInputReducer";
+import FILTER_DATA_REDUCER from "./reducers/filterDataReducer";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +17,9 @@ export const store = configureStore({
     LOADING: LOADING_REDUCER,
     IS_CARD_VISIBLE: CARD_VISIBLE_REDUCER,
     SELECTED_PAGE: SELECTED_PAGE_REDUCER,
+    SEARCH_DATA: SEARCH_DATA_REDUCER,
+    SEARCH_INPUT: SEARCH_INPUT_REDUCER,
+    FILTER_DATA: FILTER_DATA_REDUCER,
   },
   devTools: process.env.NODE_ENV !== "production",
 });

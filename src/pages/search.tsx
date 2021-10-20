@@ -11,71 +11,73 @@ import Card from "../components/searchCard";
 
 // redux
 import { CHANGE_PAGE } from "../redux/reducers/selectedPageReducer";
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { SET_DATA, VISIBLE } from "../redux/reducers/searchDataReducer";
+import { SET_INPUT } from "../redux/reducers/searchInputReducer";
+import { SET_FILTER_DATA } from "../redux/reducers/filterDataReducer";
 
 // styles
 import "../styles/pages/search.css";
 
 const Search: FC = () => {
-  const [value, setValue] = useState("");
-  const [show, setShow] = useState<boolean>(false);
-  const [language, setLanguage] = useState<String>("all");
-  const [DATA, setData] = useState([]);
-  const [realData, setRealData] = useState([]);
-  const [page, setPage] = useState<number>(1);
+  const value = useAppSelector((state) => state.SEARCH_INPUT);
+  const { isVisible, artistName, page, data } = useAppSelector(
+    (state) => state.SEARCH_DATA
+  );
+  const { language } = useAppSelector((state) => state.FILTER_DATA);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [filterShow, setFilterShow] = useState<boolean>(false);
-  const [artistName, setArtistName] = useState("");
 
   const dispatch = useAppDispatch();
 
   const fetchApi = (e: any) => {
     e.preventDefault();
     dispatch(CHANGE_PAGE(1));
-    callApi(1);
+    callApi(1, value);
   };
 
-  const callApi = async (p: number) => {
-    const name = value.trim().toLowerCase().replaceAll(" ", "-");
-    if (name) {
-      setLoading(true);
+  const callApi = async (p: number, name?: string) => {
+    if (!name) name = artistName.replaceAll(" ", "-");
 
-      try {
-        const URL = `${process.env.REACT_APP_API_URL}/search?page=${p}`;
-        const { data } = await axios.post(URL, {
-          name: name,
-        });
-        setData(data.data);
-        setRealData(data.data);
-        setPage(data.pagination);
-        dispatch(CHANGE_PAGE(p));
-        setLanguage("all");
-        setArtistName(value);
-        !show && setShow(true);
-        error && setError(false);
-      } catch (err) {
-        setError(true);
-        console.log("error = ", err);
-      }
-      setLoading(false);
+    setLoading(true);
+
+    try {
+      const URL = `${process.env.REACT_APP_API_URL}/search?page=${p}`;
+      const { data } = await axios.post(URL, {
+        name: name,
+      });
+      dispatch(
+        SET_DATA({
+          data: data.data,
+          artistName: value,
+          page: data.pagination,
+        })
+      );
+      dispatch(SET_FILTER_DATA({ data: data.data, lang: "all" }));
+      dispatch(CHANGE_PAGE(p));
+      !isVisible && dispatch(VISIBLE());
+      error && setError(false);
+    } catch (err) {
+      setError(true);
+      console.log("error = ", err);
     }
+    setLoading(false);
   };
 
   const filter = (e: any) => {
     const lang = e.target.value;
-    setLanguage(lang);
 
     if (lang === "all") {
-      setData([...realData]);
+      dispatch(SET_FILTER_DATA({ data: data, lang }));
       return;
     }
 
-    const filterData: any = realData.filter(
-      (data: any) => data.language.toLowerCase() === e.target.value
+    const filterData = data.filter(
+      (d: any) => d.language.toLocaleLowerCase() === lang
     );
 
-    setData(filterData);
+    dispatch(SET_FILTER_DATA({ data: filterData, lang }));
   };
 
   return (
@@ -85,17 +87,18 @@ const Search: FC = () => {
       <main className="search_container">
         <div className="box">
           <div className="tagline">
-            <h1>Advance search (BETA)</h1>
+            <h1>Advance search</h1>
           </div>
 
           <form onSubmit={fetchApi} className="form">
             <div className="form_input">
               <input
                 type="text"
-                onChange={(text) => setValue(text.target.value)}
+                onChange={(text) => dispatch(SET_INPUT(text.target.value))}
                 placeholder="Enter Artist Name"
                 value={value}
                 className="input"
+                required
               />
               <button type="submit" className="btn">
                 search
@@ -131,13 +134,8 @@ const Search: FC = () => {
         </div>
         {loading && <Loading />}
         {error && <h2>Not Found!</h2>}
-        {show && (
-          <Card
-            data={DATA}
-            page={page}
-            callApi={callApi}
-            artistName={artistName}
-          />
+        {isVisible && (
+          <Card page={page} callApi={callApi} artistName={artistName} />
         )}
       </main>
 

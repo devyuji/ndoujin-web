@@ -5,16 +5,16 @@ import { SET_INPUT } from "../redux/reducers/inputReducer";
 import "../styles/component/searchCard.css";
 
 interface CardProps {
-  data: any;
   page: number;
   artistName: String;
   callApi: (p: number) => void;
 }
 
-const Card: FC<CardProps> = ({ data, page, callApi, artistName }) => {
+const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
   const selectedPage = useAppSelector((state) => state.SELECTED_PAGE);
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const { data } = useAppSelector((state) => state.FILTER_DATA);
 
   return (
     <>
