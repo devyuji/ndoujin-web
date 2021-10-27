@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import "../styles/component/navbar.css";
 import { motion, AnimatePresence } from "framer-motion";
 
+// lib
+import { dropDown } from "../lib/animation";
+
 const Navbar: FC = () => {
   const [open, setOpen] = useState(false);
 
@@ -74,9 +77,10 @@ const Navbar: FC = () => {
       <AnimatePresence>
         {open && (
           <motion.ul
-            initial={{ opacity: 0, y: -100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 100 }}
+            variants={dropDown}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             className="mobile_list"
           >
             <UlItems />

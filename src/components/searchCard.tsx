@@ -1,7 +1,11 @@
 import { FC } from "react";
 import { useHistory } from "react-router";
+
+// redux
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { SET_INPUT } from "../redux/reducers/inputReducer";
+
+// components
 import "../styles/component/searchCard.css";
 
 interface CardProps {
@@ -16,9 +20,25 @@ const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
   const history = useHistory();
   const { data } = useAppSelector((state) => state.FILTER_DATA);
 
+  if (data.length === 0) {
+    return (
+      <div style={{ padding: "1rem" }}>
+        <h2 style={{ textAlign: "center" }}>No result found!</h2>
+      </div>
+    );
+  }
+
   return (
     <>
-      <h1 className="artist_name">Search Result : {artistName}</h1>
+      <div
+        style={{
+          padding: "1rem 2rem",
+          textAlign: "center",
+        }}
+      >
+        <h1 className="artist_name">Search Result : {artistName}</h1>
+      </div>
+
       <div className="search_card_container">
         {data.map((d: any, index: Number) => {
           const lang = d.language.slice(0, 2);
@@ -44,6 +64,7 @@ const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
           );
         })}
       </div>
+
       <div className="pagination">
         {new Array(page).fill(null).map((p: any, index: number) => (
           <button

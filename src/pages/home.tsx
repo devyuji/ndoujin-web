@@ -1,6 +1,7 @@
 import { FC, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../styles/pages/home.css";
+import { AnimatePresence } from "framer-motion";
 
 // components
 import Card from "../components/card";
@@ -10,10 +11,12 @@ import Loading from "../components/loading";
 
 // redux
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { RESET_DATA, SET_DATA } from "../redux/reducers/dataReducer";
+import { SET_DATA } from "../redux/reducers/dataReducer";
 import { CLEAR_INPUT, SET_INPUT } from "../redux/reducers/inputReducer";
 import { START_LOADING, STOP_LOADING } from "../redux/reducers/loadingReducer";
-import { HIDE_CARD, SHOW_CARD } from "../redux/reducers/cardVisibleReducer";
+import { SHOW_CARD } from "../redux/reducers/cardVisibleReducer";
+import Error from "../components/model/error";
+import { FormEvent } from "react-router/node_modules/@types/react";
 
 const Home: FC = () => {
   const value = useAppSelector((state) => state.INPUT);
@@ -32,28 +35,25 @@ const Home: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchApi = async (e: any) => {
+  const fetchApi = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (value) {
-      dispatch(START_LOADING());
-      const id = value.trim();
-      try {
-        const { data } = await axios.post(process.env.REACT_APP_API_URL!, {
-          id,
-        });
-        setError(false);
-        dispatch(SET_DATA(data));
-        !isCardVisible && dispatch(SHOW_CARD());
-        dispatch(CLEAR_INPUT());
-      } catch (err) {
-        console.error("error = ", err);
-        dispatch(RESET_DATA());
-        dispatch(HIDE_CARD());
 
-        setError(true);
-      }
-      dispatch(STOP_LOADING());
+    dispatch(START_LOADING());
+    const id = value.trim();
+    try {
+      const { data } = await axios.post(process.env.REACT_APP_API_URL!, {
+        id,
+      });
+
+      dispatch(SET_DATA(data));
+      !isCardVisible && dispatch(SHOW_CARD());
+      dispatch(CLEAR_INPUT());
+    } catch (err) {
+      console.error("error = ", err);
+
+      setError(true);
     }
+    dispatch(STOP_LOADING());
   };
 
   return (
@@ -71,6 +71,7 @@ const Home: FC = () => {
               placeholder="e.g. #123456"
               value={value}
               onChange={(text) => dispatch(SET_INPUT(text.target.value))}
+              required
             />
             <button type="submit" ref={buttonRef}>
               go
@@ -84,7 +85,10 @@ const Home: FC = () => {
             <Card data={DATA} />
           </>
         )}
-        {error && <h2>Not Found!</h2>}
+
+        <AnimatePresence>
+          {error && <Error handleClose={() => setError(false)} />}
+        </AnimatePresence>
       </main>
 
       <Footer />

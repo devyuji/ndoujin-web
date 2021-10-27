@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FC, useState } from "react";
+import { FC, useState, FormEvent } from "react";
 import { AnimatePresence } from "framer-motion";
 
 // components
@@ -8,11 +8,12 @@ import Loading from "../components/loading";
 import Navbar from "../components/navbar";
 import Filters from "../components/filters";
 import Card from "../components/searchCard";
+import Error from "../components/model/error";
 
 // redux
 import { CHANGE_PAGE } from "../redux/reducers/selectedPageReducer";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { SET_DATA, VISIBLE } from "../redux/reducers/searchDataReducer";
+import { SET_DATA } from "../redux/reducers/searchDataReducer";
 import { SET_INPUT } from "../redux/reducers/searchInputReducer";
 import { SET_FILTER_DATA } from "../redux/reducers/filterDataReducer";
 
@@ -31,7 +32,7 @@ const Search: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const fetchApi = (e: any) => {
+  const fetchApi = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(CHANGE_PAGE(1));
     callApi(1, value);
@@ -56,8 +57,6 @@ const Search: FC = () => {
       );
       dispatch(SET_FILTER_DATA({ data: data.data, lang: "all" }));
       dispatch(CHANGE_PAGE(p));
-      !isVisible && dispatch(VISIBLE());
-      error && setError(false);
     } catch (err) {
       setError(true);
       console.log("error = ", err);
@@ -125,7 +124,6 @@ const Search: FC = () => {
                 <p>Filter</p>
               </button>
 
-              {/* filters */}
               <AnimatePresence>
                 {filterShow && <Filters language={language} filter={filter} />}
               </AnimatePresence>
@@ -133,12 +131,13 @@ const Search: FC = () => {
           </form>
         </div>
         {loading && <Loading />}
-        {error && <h2>Not Found!</h2>}
-        {isVisible && (
-          <Card page={page} callApi={callApi} artistName={artistName} />
-        )}
       </main>
-
+      {isVisible && (
+        <Card page={page} callApi={callApi} artistName={artistName} />
+      )}
+      <AnimatePresence>
+        {error && <Error handleClose={() => setError(false)} />}
+      </AnimatePresence>
       <Footer />
     </>
   );

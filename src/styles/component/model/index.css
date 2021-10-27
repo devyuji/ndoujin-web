@@ -1,0 +1,7 @@
+.model_container {
+  background-color: var(--bg-clr);
+  padding: 2em;
+  border-radius: 10px;
+
+  width: clamp(50%, 500px, 90%);
+}
