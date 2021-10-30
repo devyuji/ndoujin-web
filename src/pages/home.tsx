@@ -62,7 +62,7 @@ const Home: FC = () => {
       <main className="home_container">
         <div className="box">
           <div className="tagline">
-            <h1>Easiest way to find nhentai</h1>
+            <h1>Easiest way to use nhentai</h1>
           </div>
           <form onSubmit={fetchApi} className="form">
             <input

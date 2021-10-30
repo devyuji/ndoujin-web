@@ -86,7 +86,7 @@ const Search: FC = () => {
       <main className="search_container">
         <div className="box">
           <div className="tagline">
-            <h1>Advance search</h1>
+            <h1>Advance search (beta)</h1>
           </div>
 
           <form onSubmit={fetchApi} className="form">

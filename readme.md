@@ -1,4 +1,4 @@
-## ND - Easiest Way To Find Nhentai
+## ND - Easiest Way To Use Nhentai
 
 ![](/public/screenshot.png)
 

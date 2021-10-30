@@ -1,7 +1,9 @@
 import { FC, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../styles/component/navbar.css";
 import { motion, AnimatePresence } from "framer-motion";
+
+// styles
+import "../styles/component/navbar.css";
 
 // lib
 import { dropDown } from "../lib/animation";
@@ -17,7 +19,7 @@ const Navbar: FC = () => {
     }
   }, [open]);
 
-  const UlItems: FC = () => {
+  const NavLinks: FC = () => {
     return (
       <>
         <li>
@@ -57,6 +59,7 @@ const Navbar: FC = () => {
   return (
     <header className="navbar_container">
       <h1>nd</h1>
+
       <button className="hamburger" onClick={() => setOpen(!open)}>
         <svg
           viewBox="0 0 24 24"
@@ -66,13 +69,33 @@ const Navbar: FC = () => {
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
+          <motion.line
+            animate={{ rotate: open ? -45 : 0 }}
+            x1="3"
+            y1="12"
+            x2="21"
+            y2="12"
+          ></motion.line>
+          <motion.line
+            animate={{ opacity: open ? 0 : 1 }}
+            transition={{ duration: 0.1 }}
+            x1="3"
+            y1="6"
+            x2="21"
+            y2="6"
+          ></motion.line>
+          <motion.line
+            animate={{ rotate: open ? 45 : 0 }}
+            x1="3"
+            y1="18"
+            x2="21"
+            y2="18"
+          ></motion.line>
         </svg>
       </button>
+
       <ul className="list">
-        <UlItems />
+        <NavLinks />
       </ul>
       <AnimatePresence>
         {open && (
@@ -83,7 +106,7 @@ const Navbar: FC = () => {
             exit="exit"
             className="mobile_list"
           >
-            <UlItems />
+            <NavLinks />
           </motion.ul>
         )}
       </AnimatePresence>

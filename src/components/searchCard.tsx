@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { FC } from "react";
 import { useHistory } from "react-router";
 
@@ -39,7 +40,14 @@ const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
         <h1 className="artist_name">Search Result : {artistName}</h1>
       </div>
 
-      <div className="search_card_container">
+      <motion.div
+        animate={{
+          transition: {
+            type: "spring",
+          },
+        }}
+        className="search_card_container"
+      >
         {data.map((d: any, index: Number) => {
           const lang = d.language.slice(0, 2);
           return (
@@ -63,7 +71,7 @@ const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
             </button>
           );
         })}
-      </div>
+      </motion.div>
 
       <div className="pagination">
         {new Array(page).fill(null).map((p: any, index: number) => (

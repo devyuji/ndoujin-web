@@ -18,11 +18,12 @@ const App: FC = () => {
     const list = localStorage.getItem("history");
 
     if (!list) localStorage.setItem("history", JSON.stringify([]));
+
     checkStatus();
 
     setInterval(() => {
       checkStatus();
-    }, 60000);
+    }, 120000);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

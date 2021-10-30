@@ -27,7 +27,7 @@
 }
 
 .navbar_container .mobile_list {
-  position: absolute;
+  position: fixed;
   top: 5rem;
   left: 0;
   right: 0;
