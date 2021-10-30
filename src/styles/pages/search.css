@@ -53,17 +53,32 @@
   cursor: pointer;
 }
 
-.search_container .form .filter_container .icon {
+.search_container .form .filter_container .filter_icon_container {
   display: flex;
-  gap: 0.5em;
-  align-items: center;
+  /* align-items: center; */
   justify-content: flex-end;
+
+  width: 100%;
+}
+
+.search_container .form .filter_container .icon {
   border: none;
   font-family: inherit;
   background-color: transparent;
   color: white;
   cursor: pointer;
-  width: 100%;
+
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+
+  font-size: 1rem;
+  text-transform: uppercase;
+  padding: 0.5em;
+}
+
+.search_container .form .filter_container .icon:hover {
+  background-color: rgba(128, 128, 128, 0.418);
 }
 
 .search_container .form .filter_container .language {

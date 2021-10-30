@@ -9,9 +9,12 @@ interface FiltersProps {
 const Filters: FC<FiltersProps> = ({ language, filter }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        ease: "linear",
+      }}
+      exit={{ opacity: 0 }}
       className="filter"
     >
       <h2>Language :</h2>

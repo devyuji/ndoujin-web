@@ -47,13 +47,13 @@ const Home: FC = () => {
 
       dispatch(SET_DATA(data));
       !isCardVisible && dispatch(SHOW_CARD());
-      dispatch(CLEAR_INPUT());
     } catch (err) {
       console.error("error = ", err);
 
       setError(true);
     }
     dispatch(STOP_LOADING());
+    dispatch(CLEAR_INPUT());
   };
 
   return (
