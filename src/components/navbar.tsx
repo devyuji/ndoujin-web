@@ -1,6 +1,6 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useCycle } from "framer-motion";
 
 // styles
 import "../styles/component/navbar.css";
@@ -8,8 +8,42 @@ import "../styles/component/navbar.css";
 // lib
 import { dropDown } from "../lib/animation";
 
+interface navItemsProps {
+  name: string;
+  link: string;
+  newTab: boolean;
+}
+
 const Navbar: FC = () => {
-  const [open, setOpen] = useState(false);
+  const [open, toggleOpen] = useCycle(false, true);
+
+  const navItems: Array<navItemsProps> = [
+    {
+      name: "home",
+      link: "/",
+      newTab: false,
+    },
+    {
+      name: "history",
+      link: "/history",
+      newTab: false,
+    },
+    {
+      name: "search",
+      link: "/search",
+      newTab: false,
+    },
+    {
+      name: "github",
+      link: "https://github.com/devyuji/ndoujin-app",
+      newTab: true,
+    },
+    {
+      name: "instagram",
+      link: "https://instagram.com/devyuji",
+      newTab: true,
+    },
+  ];
 
   useEffect(() => {
     if (open) {
@@ -22,36 +56,17 @@ const Navbar: FC = () => {
   const NavLinks: FC = () => {
     return (
       <>
-        <li>
-          <Link to="/">home</Link>
-        </li>
-        <li>
-          <Link to="/history">history</Link>
-        </li>
-
-        <li>
-          <Link to="/search">search</Link>
-        </li>
-
-        <li>
-          <a
-            href="https://github.com/devyuji/ndoujin-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            github
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="https://instagram.com/devyuji"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            instagram
-          </a>
-        </li>
+        {navItems.map((item) => (
+          <li>
+            {item.newTab ? (
+              <a href={item.link} target="_blank" rel="noopener noreferrer">
+                {item.name}
+              </a>
+            ) : (
+              <Link to={item.link}>{item.name}</Link>
+            )}
+          </li>
+        ))}
       </>
     );
   };
@@ -60,7 +75,7 @@ const Navbar: FC = () => {
     <header className="navbar_container">
       <h1>nd</h1>
 
-      <button className="hamburger" onClick={() => setOpen(!open)}>
+      <button className="hamburger" onClick={() => toggleOpen()}>
         <svg
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -70,22 +85,27 @@ const Navbar: FC = () => {
           strokeLinejoin="round"
         >
           <motion.line
-            animate={{ rotate: open ? -45 : 0 }}
+            animate={{ opacity: open ? 0 : 1, translateX: open ? "100%" : 0 }}
             x1="3"
             y1="12"
             x2="21"
             y2="12"
           ></motion.line>
           <motion.line
-            animate={{ opacity: open ? 0 : 1 }}
-            transition={{ duration: 0.1 }}
+            animate={{
+              rotate: open ? -45 : 0,
+              translateY: open ? 6 : 0,
+            }}
             x1="3"
             y1="6"
             x2="21"
             y2="6"
           ></motion.line>
           <motion.line
-            animate={{ rotate: open ? 45 : 0 }}
+            animate={{
+              rotate: open ? 45 : 0,
+              translateY: open ? -6 : 0,
+            }}
             x1="3"
             y1="18"
             x2="21"
@@ -97,13 +117,14 @@ const Navbar: FC = () => {
       <ul className="list">
         <NavLinks />
       </ul>
-      <AnimatePresence>
+
+      <AnimatePresence initial={false} exitBeforeEnter={true}>
         {open && (
           <motion.ul
             variants={dropDown}
             initial="hidden"
             animate="visible"
-            exit="exit"
+            exit="hidden"
             className="mobile_list"
           >
             <NavLinks />

@@ -12,7 +12,7 @@ const Filters: FC<FiltersProps> = ({ language, filter }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{
-        ease: "linear",
+        ease: "backInOut",
       }}
       exit={{ opacity: 0 }}
       className="filter"
