@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useRef, useEffect, FormEventHandler } from "react";
 import axios from "axios";
 import "../styles/pages/home.css";
 import { AnimatePresence } from "framer-motion";
@@ -16,7 +16,7 @@ import { CLEAR_INPUT, SET_INPUT } from "../redux/reducers/inputReducer";
 import { START_LOADING, STOP_LOADING } from "../redux/reducers/loadingReducer";
 import { SHOW_CARD } from "../redux/reducers/cardVisibleReducer";
 import Error from "../components/model/error";
-import { FormEvent } from "react-router/node_modules/@types/react";
+// import { FormEvent } from "react-router/node_modules/@types/react";
 
 const Home: FC = () => {
   const value = useAppSelector((state) => state.INPUT);
@@ -35,7 +35,7 @@ const Home: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchApi = async (e: FormEvent<HTMLFormElement>) => {
+  const fetchApi: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
 
     dispatch(START_LOADING());

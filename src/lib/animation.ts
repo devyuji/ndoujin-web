@@ -29,8 +29,8 @@ export const dropDown: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      ease: "anticipate",
-      duration: 0.5,
+      // ease: "easeIn",
+      // duration: 0.5,
     },
   },
 };

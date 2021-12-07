@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import axios from "axios";
 
 // pages
@@ -21,10 +21,6 @@ const App: FC = () => {
 
     checkStatus();
 
-    setInterval(() => {
-      checkStatus();
-    }, 120000);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -42,19 +38,19 @@ const App: FC = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/search" exact component={Search} />
-          <Route path="/history" exact component={History} />
-          <Route path="*" component={RedirectHome} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/history" element={<History />} />
+          <Route path="*" element={<RedirectHome />} />
+        </Routes>
       </BrowserRouter>
     </div>
   );
 };
 
 const RedirectHome: FC = () => {
-  return <Redirect to="/" />;
+  return <Navigate to="/" />;
 };
 
 export default App;

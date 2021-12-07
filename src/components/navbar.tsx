@@ -56,8 +56,8 @@ const Navbar: FC = () => {
   const NavLinks: FC = () => {
     return (
       <>
-        {navItems.map((item) => (
-          <li>
+        {navItems.map((item, index) => (
+          <li key={`${index}`}>
             {item.newTab ? (
               <a href={item.link} target="_blank" rel="noopener noreferrer">
                 {item.name}
@@ -118,7 +118,7 @@ const Navbar: FC = () => {
         <NavLinks />
       </ul>
 
-      <AnimatePresence initial={false} exitBeforeEnter={true}>
+      <AnimatePresence exitBeforeEnter={true}>
         {open && (
           <motion.ul
             variants={dropDown}

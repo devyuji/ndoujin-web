@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { FC } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 // redux
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -18,7 +18,7 @@ interface CardProps {
 const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
   const selectedPage = useAppSelector((state) => state.SELECTED_PAGE);
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { data } = useAppSelector((state) => state.FILTER_DATA);
 
   if (data.length === 0) {
@@ -56,7 +56,7 @@ const Card: FC<CardProps> = ({ page, callApi, artistName }) => {
               key={`${index}`}
               onClick={() => {
                 dispatch(SET_INPUT(d.link));
-                history.push("/");
+                navigate("/");
               }}
             >
               <div className="image_container">
