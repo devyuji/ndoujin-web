@@ -1,14 +1,15 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import Backdrop from "./backdrop";
 import { motion } from "framer-motion";
 import { scaleUp } from "../../lib/animation";
 import "../../styles/component/model/index.css";
 
-interface ModelProps {
+interface Props {
   handleClose: () => void;
+  children: ReactNode;
 }
 
-const Model: FC<ModelProps> = ({ children, handleClose }) => {
+const Model: FC<Props> = ({ children, handleClose }) => {
   return (
     <Backdrop onClick={handleClose}>
       <motion.div

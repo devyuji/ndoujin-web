@@ -28,9 +28,5 @@ export const dropDown: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      // ease: "easeIn",
-      // duration: 0.5,
-    },
   },
 };

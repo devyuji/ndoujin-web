@@ -1,16 +1,16 @@
-import { FC, useEffect } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import "../../styles/component/model/backdrop.css";
 import { motion } from "framer-motion";
 
 // lib
 import { fadeIn } from "../../lib/animation";
-// import { useEffect } from "react-router/node_modules/@types/react";
 
-interface BackdropProps {
+interface Props {
   onClick: () => void;
+  children: ReactNode;
 }
 
-const Backdrop: FC<BackdropProps> = ({ children, onClick }) => {
+const Backdrop: FC<Props> = ({ children, onClick }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
 

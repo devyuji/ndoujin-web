@@ -1,10 +1,17 @@
 import { motion } from "framer-motion";
 import { FC } from "react";
+import { fadeIn } from "../lib/animation";
 import "../styles/component/loading.css";
 
 const Loading: FC = () => {
   return (
-    <div className="loading_container">
+    <motion.div
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      className="loading_container"
+    >
       <motion.svg
         animate={{ x: 30 }}
         transition={{
@@ -46,7 +53,7 @@ const Loading: FC = () => {
         <circle cx="19" cy="12" r="1"></circle>
         <circle cx="5" cy="12" r="1"></circle>
       </motion.svg>
-    </div>
+    </motion.div>
   );
 };
 

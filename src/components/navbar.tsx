@@ -1,11 +1,6 @@
 import { FC, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useCycle } from "framer-motion";
-
-// styles
 import "../styles/component/navbar.css";
-
-// lib
 import { dropDown } from "../lib/animation";
 
 interface navItemsProps {
@@ -18,21 +13,6 @@ const Navbar: FC = () => {
   const [open, toggleOpen] = useCycle(false, true);
 
   const navItems: Array<navItemsProps> = [
-    {
-      name: "home",
-      link: "/",
-      newTab: false,
-    },
-    {
-      name: "history",
-      link: "/history",
-      newTab: false,
-    },
-    {
-      name: "search",
-      link: "/search",
-      newTab: false,
-    },
     {
       name: "github",
       link: "https://github.com/devyuji/ndoujin-app",
@@ -58,13 +38,9 @@ const Navbar: FC = () => {
       <>
         {navItems.map((item, index) => (
           <li key={`${index}`}>
-            {item.newTab ? (
-              <a href={item.link} target="_blank" rel="noopener noreferrer">
-                {item.name}
-              </a>
-            ) : (
-              <Link to={item.link}>{item.name}</Link>
-            )}
+            <a href={item.link} target="_blank" rel="noopener noreferrer">
+              {item.name}
+            </a>
           </li>
         ))}
       </>
@@ -118,19 +94,19 @@ const Navbar: FC = () => {
         <NavLinks />
       </ul>
 
-      <AnimatePresence exitBeforeEnter={true}>
-        {open && (
-          <motion.ul
-            variants={dropDown}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            className="mobile_list"
-          >
-            <NavLinks />
-          </motion.ul>
-        )}
-      </AnimatePresence>
+      {/* <AnimatePresence exitBeforeEnter={true}> */}
+      {open && (
+        <motion.ul
+          variants={dropDown}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          className="mobile_list"
+        >
+          <NavLinks />
+        </motion.ul>
+      )}
+      {/* </AnimatePresence>/ */}
     </header>
   );
 };

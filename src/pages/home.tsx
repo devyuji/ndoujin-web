@@ -1,95 +1,130 @@
-import { FC, useState, useRef, useEffect, FormEventHandler } from "react";
-import axios from "axios";
-import "../styles/pages/home.css";
-import { AnimatePresence } from "framer-motion";
-
-// components
-import Card from "../components/card";
-import Footer from "../components/footer";
+import { FC, useState } from "react";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+import "../styles/pages/home.css";
+import { motion } from "framer-motion";
+import axios from "axios";
+import Error from "../components/modal/error";
+import AnimatedPresenseFix from "../components/animatedPresenseFix";
 import Loading from "../components/loading";
+import Card from "../components/card";
+import { dataType } from "../lib/types";
 
-// redux
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { SET_DATA } from "../redux/reducers/dataReducer";
-import { CLEAR_INPUT, SET_INPUT } from "../redux/reducers/inputReducer";
-import { START_LOADING, STOP_LOADING } from "../redux/reducers/loadingReducer";
-import { SHOW_CARD } from "../redux/reducers/cardVisibleReducer";
-import Error from "../components/model/error";
-// import { FormEvent } from "react-router/node_modules/@types/react";
+interface Props {}
 
-const Home: FC = () => {
-  const value = useAppSelector((state) => state.INPUT);
-  const DATA = useAppSelector((state) => state.DATA);
-  const isCardVisible = useAppSelector((state) => state.IS_CARD_VISIBLE);
-  const loading = useAppSelector((state) => state.LOADING);
+const Home: FC<Props> = () => {
+  const [value, setValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [DATA, setData] = useState<dataType>({
+    id: "",
+    error: false,
+    image_cover: "",
+    title: "",
+    artist: "",
+    language: "",
+    page: "",
+    tags: [],
+  });
+
   const [error, setError] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [cardVisible, setCardVisible] = useState(false);
 
-  const dispatch = useAppDispatch();
+  const readOnly = () => {
+    if (value.trim().length > 0)
+      window.open(`https://nhentai.net/g/${value}/1`, "_blank");
+  };
 
-  useEffect(() => {
-    inputRef.current?.focus();
-    if (value) buttonRef.current?.click();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchApi: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-
-    dispatch(START_LOADING());
+  const fetchApi = async () => {
     const id = value.trim();
+
+    if (id.length === 0) return;
+
+    setLoading(true);
+
     try {
       const { data } = await axios.post(process.env.REACT_APP_API_URL!, {
         id,
       });
 
-      dispatch(SET_DATA(data));
-      !isCardVisible && dispatch(SHOW_CARD());
-    } catch (err) {
-      console.error("error = ", err);
+      setData(data);
 
+      !cardVisible && setCardVisible(true);
+    } catch (err) {
+      console.error(err);
       setError(true);
     }
-    dispatch(STOP_LOADING());
-    dispatch(CLEAR_INPUT());
+    setLoading(false);
   };
 
   return (
     <>
       <Navbar />
-      <main className="home_container">
+
+      <div className="home_container">
         <div className="box">
           <div className="tagline">
             <h1>Easiest way to use nhentai</h1>
           </div>
-          <form onSubmit={fetchApi} className="form">
+          <form onSubmit={(e) => e.preventDefault()} className="form">
             <input
-              ref={inputRef}
-              type="number"
-              placeholder="e.g. #123456"
               value={value}
-              onChange={(text) => dispatch(SET_INPUT(text.target.value))}
-              required
+              onChange={(e) => setValue(e.target.value)}
+              type="number"
             />
-            <button type="submit" ref={buttonRef}>
-              go
-            </button>
-          </form>
-        </div>
-        {loading && <Loading />}
-        {isCardVisible && (
-          <>
-            <p className="code">#{DATA.id}</p>
-            <Card data={DATA} />
-          </>
-        )}
 
-        <AnimatePresence>
-          {error && <Error handleClose={() => setError(false)} />}
-        </AnimatePresence>
-      </main>
+            <div className="buttons">
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.9 }}
+                onClick={fetchApi}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                See Information
+              </motion.button>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.9 }}
+                onClick={readOnly}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                Read Only
+              </motion.button>
+            </div>
+          </form>
+          <AnimatedPresenseFix>{loading && <Loading />}</AnimatedPresenseFix>
+
+          {cardVisible && <Card data={DATA} />}
+        </div>
+      </div>
+
+      <AnimatedPresenseFix>
+        {error && <Error handleClose={() => setError(false)} />}
+      </AnimatedPresenseFix>
 
       <Footer />
     </>

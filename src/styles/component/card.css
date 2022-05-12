@@ -1,11 +1,15 @@
+.code {
+  margin-top: 2rem;
+}
+
 .card_container {
-  width: 90%;
   display: flex;
   flex-direction: column;
   padding: 1rem;
   box-shadow: 0 10px 10px 5px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-  margin-bottom: 2rem;
+
+  margin-bottom: 1rem;
 }
 
 .card_container .details {
@@ -53,7 +57,7 @@
 
 @media (min-width: 800px) {
   .card_container {
-    width: 45rem;
+    /* width: 45rem; */
     flex-direction: row;
     gap: 2rem;
   }
