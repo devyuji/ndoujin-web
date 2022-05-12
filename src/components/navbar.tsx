@@ -1,7 +1,8 @@
 import { FC, useEffect } from "react";
-import { motion, AnimatePresence, useCycle } from "framer-motion";
+import { motion, useCycle } from "framer-motion";
 import "../styles/component/navbar.css";
 import { dropDown } from "../lib/animation";
+import AnimatedPresenseFix from "./animatedPresenseFix";
 
 interface navItemsProps {
   name: string;
@@ -94,19 +95,19 @@ const Navbar: FC = () => {
         <NavLinks />
       </ul>
 
-      {/* <AnimatePresence exitBeforeEnter={true}> */}
-      {open && (
-        <motion.ul
-          variants={dropDown}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          className="mobile_list"
-        >
-          <NavLinks />
-        </motion.ul>
-      )}
-      {/* </AnimatePresence>/ */}
+      <AnimatedPresenseFix>
+        {open && (
+          <motion.ul
+            variants={dropDown}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className="mobile_list"
+          >
+            <NavLinks />
+          </motion.ul>
+        )}
+      </AnimatedPresenseFix>
     </header>
   );
 };
