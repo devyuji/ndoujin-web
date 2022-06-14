@@ -1,8 +1,10 @@
-import { FC, useEffect } from "react";
-import { motion, useCycle } from "framer-motion";
+import { useEffect, useState } from "react";
+import type { FC } from "react";
+import { motion } from "framer-motion";
 import "../styles/component/navbar.css";
 import { dropDown } from "../lib/animation";
 import AnimatedPresenseFix from "./animatedPresenseFix";
+import { Link } from "react-router-dom";
 
 interface navItemsProps {
   name: string;
@@ -11,9 +13,24 @@ interface navItemsProps {
 }
 
 const Navbar: FC = () => {
-  const [open, toggleOpen] = useCycle(false, true);
+  const [open, toggleOpen] = useState(false);
 
-  const navItems: Array<navItemsProps> = [
+  const navItems: navItemsProps[] = [
+    {
+      name: "home",
+      link: "/",
+      newTab: false,
+    },
+    {
+      name: "saved",
+      link: "/saved",
+      newTab: false,
+    },
+    {
+      name: "history",
+      link: "/history",
+      newTab: false,
+    },
     {
       name: "github",
       link: "https://github.com/devyuji/ndoujin-app",
@@ -39,9 +56,15 @@ const Navbar: FC = () => {
       <>
         {navItems.map((item, index) => (
           <li key={`${index}`}>
-            <a href={item.link} target="_blank" rel="noopener noreferrer">
-              {item.name}
-            </a>
+            {item.newTab ? (
+              <a href={item.link} target="_blank" rel="noopener noreferrer">
+                {item.name}
+              </a>
+            ) : (
+              <Link to={item.link} onClick={() => toggleOpen(false)}>
+                {item.name}
+              </Link>
+            )}
           </li>
         ))}
       </>
@@ -50,9 +73,14 @@ const Navbar: FC = () => {
 
   return (
     <header className="navbar_container">
-      <h1>nd</h1>
+      <Link to="/">
+        <h1>nd</h1>
+      </Link>
 
-      <button className="hamburger" onClick={() => toggleOpen()}>
+      <button
+        className="hamburger"
+        onClick={() => toggleOpen((prevState) => !prevState)}
+      >
         <svg
           viewBox="0 0 24 24"
           stroke="currentColor"

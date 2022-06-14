@@ -11,9 +11,10 @@ html {
 }
 
 :root {
-  --bg-clr: #1b1c1e;
+  --bg-clr: #000;
   --text-clr: #fafafa;
   --primary-clr: red;
+  --blur-clr: hsla(0, 0%, 100%, 0.07);
 
   --ft: "Montserrat", sans-serif;
   --ft-medium: 500;
@@ -31,12 +32,18 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+  font-family: var(--ft);
 }
 
 img {
   display: block;
   height: 100%;
   width: 100%;
+}
+
+button {
+  font-family: var(--ft);
+  cursor: pointer;
 }
 
 .App {

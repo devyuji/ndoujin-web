@@ -9,7 +9,7 @@
 }
 
 .home_container .box {
-  width: 45rem;
+  width: 50rem;
 }
 
 .home_container .tagline {
@@ -74,7 +74,7 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
   .home_container .box {
     width: 100%;
   }

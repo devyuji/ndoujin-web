@@ -1,66 +1,121 @@
-import { FC } from "react";
-import { dataType } from "../lib/types";
+import type { FC } from "react";
+import { saveHistory } from "../lib/history";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setSaved, toggleError } from "../redux/reducers/homeState";
 import "../styles/component/card.css";
-import { motion } from "framer-motion";
-import { fadeIn } from "../lib/animation";
+import Button from "./button";
 
-interface Props {
-  data: dataType;
-}
+interface Props {}
 
-const Card: FC<Props> = ({ data }) => {
-  const addToList = () => {
-    // let list: any = localStorage.getItem("history");
-    // list = JSON.parse(list);
+const Card: FC<Props> = () => {
+  const data = useAppSelector((state) => state.doujinData);
+  const isSaved = useAppSelector((state) => state.homeState.isSaved);
 
-    // list.push(data.id);
-    // if (list.length > 500) list.shift();
+  const dispatch = useAppDispatch();
 
-    // localStorage.setItem("history", JSON.stringify(list));
+  const readNow = () => {
+    saveHistory(data.id);
 
-    window.open(`https://nhentai.net/g/${data.id}/1`, "_blank");
+    window.open(`https://nhentai.net/g/${data?.id}/1`, "_blank");
+  };
+
+  const saved = () => {
+    console.log("saved function called");
+
+    try {
+      let savedData: any = localStorage.getItem("saved");
+
+      savedData = JSON.parse(savedData);
+
+      if (isSaved) {
+        const found = savedData.findIndex(
+          (element: any) => element.id === data.id
+        );
+
+        savedData.splice(found, 1);
+
+        localStorage.setItem("saved", JSON.stringify(savedData));
+
+        dispatch(setSaved(false));
+
+        return;
+      }
+
+      const saveData = {
+        id: data.id,
+        name: data.title,
+        image: data.image_cover,
+      };
+
+      savedData.push(saveData);
+
+      localStorage.setItem("saved", JSON.stringify(savedData));
+
+      dispatch(setSaved(true));
+    } catch (err) {
+      dispatch(toggleError());
+    }
   };
 
   return (
-    <>
-      <p className="code">#{data.id}</p>
-      <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="visible"
-        className="card_container"
-      >
-        <div className="image_container">
-          <img src={`data:image/png;base64,${data.image_cover}`} alt="" />
+    <div className="card_container">
+      <div className="top">
+        <Button type="button" onClick={() => console.log("copy to clipboard")}>
+          #{data!.id}
+        </Button>
+
+        <Button type="button" onClick={saved}>
+          <svg
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            stroke="currentColor"
+            strokeWidth="2"
+            fill={isSaved ? "white" : "none"}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </Button>
+      </div>
+
+      <div className="details">
+        <div>
+          <img
+            src={`data:image/png;base64,${data.image_cover}`}
+            alt={data.title}
+          />
         </div>
 
-        <div className="details">
-          <h3>{data.title}</h3>
+        <div>
+          <h1>{data?.title}</h1>
           <p>No. of pages : {data.page}</p>
           <p>Language : {data.language}</p>
           <p>Artist : {data.artist}</p>
-          {/* tags */}
-          {data.tags && (
-            <div className="tags">
-              {data.tags.map((d: String, index: number) => (
-                <p
-                  key={index}
-                  style={{
-                    color:
-                      d === "netorare" || d === "cheating" ? "red" : "white",
-                  }}
-                >
-                  {d}
-                </p>
-              ))}
-            </div>
-          )}
-          <button className="link" onClick={addToList}>
-            READ NOW
-          </button>
+
+          <div className="tags-container">
+            {data.tags.map((tag, index) => (
+              <p
+                key={index}
+                style={{
+                  color:
+                    tag === "cheating" || tag === "netorare" || tag === "rape"
+                      ? "red"
+                      : "white",
+                }}
+              >
+                {tag}
+              </p>
+            ))}
+          </div>
         </div>
-      </motion.div>
-    </>
+      </div>
+
+      <Button className="read-now" onClick={readNow} type="button">
+        Read Now
+      </Button>
+    </div>
   );
 };
 

@@ -1,10 +1,10 @@
-export interface dataType {
+export type doujinProps = {
   id: string;
   error: boolean;
-  image_cover: String;
-  title: String;
-  tags: Array<String>;
-  page: String;
-  language: String;
-  artist: String;
-}
+  image_cover: string;
+  title: string;
+  tags: Array<string>;
+  page: string;
+  language: string;
+  artist: string;
+};

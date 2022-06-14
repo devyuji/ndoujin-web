@@ -1,83 +1,116 @@
-import { FC, useState } from "react";
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
+import type { FC, FormEventHandler } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/pages/home.css";
-import { motion } from "framer-motion";
 import axios from "axios";
 import Error from "../components/modal/error";
 import AnimatedPresenseFix from "../components/animatedPresenseFix";
 import Loading from "../components/loading";
 import Card from "../components/card";
-import { dataType } from "../lib/types";
+import Button from "../components/button";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  toggleLoading,
+  toggleError,
+  showCard,
+  setSaved,
+} from "../redux/reducers/homeState";
+import { add } from "../redux/reducers/doujinData";
+import { useSearchParams } from "react-router-dom";
+import { saveHistory } from "../lib/history";
 
 interface Props {}
 
 const Home: FC<Props> = () => {
   const [value, setValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [DATA, setData] = useState<dataType>({
-    id: "",
-    error: false,
-    image_cover: "",
-    title: "",
-    artist: "",
-    language: "",
-    page: "",
-    tags: [],
-  });
+  const { loading, cardVisible, error } = useAppSelector(
+    (state) => state.homeState
+  );
+  const buttonRef = useRef<HTMLInputElement>(null);
 
-  const [error, setError] = useState(false);
-  const [cardVisible, setCardVisible] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const readOnly = () => {
-    if (value.trim().length > 0)
+  const [query] = useSearchParams();
+
+  useEffect(() => {
+    console.log("rendering");
+    const code = query.get("code");
+
+    if (code != null) {
+      setValue(code);
+      buttonRef.current?.focus();
+    }
+  }, [query]);
+
+  const read = () => {
+    if (value.trim().length > 0) {
+      saveHistory(value);
+
       window.open(`https://nhentai.net/g/${value}/1`, "_blank");
+    }
   };
 
-  const fetchApi = async () => {
+  const fetchApi: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    console.log("calling");
+
     const id = value.trim();
 
     if (id.length === 0) return;
 
-    setLoading(true);
+    dispatch(toggleLoading());
 
     try {
       const { data } = await axios.post(process.env.REACT_APP_API_URL!, {
         id,
       });
 
-      setData(data);
+      dispatch(setSaved(isSaved(data.id)));
 
-      !cardVisible && setCardVisible(true);
+      dispatch(add(data));
+
+      !cardVisible && dispatch(showCard());
+
+      setValue("");
     } catch (err) {
       console.error(err);
-      setError(true);
+
+      dispatch(toggleError());
     }
-    setLoading(false);
+
+    dispatch(toggleLoading());
+  };
+
+  const isSaved = (id: string) => {
+    console.log("isaved function running");
+    let saved: any = localStorage.getItem("saved");
+    saved = JSON.parse(saved);
+
+    const found = saved.find((element: any) => element.id === id);
+
+    if (found) return true;
+
+    return false;
   };
 
   return (
     <>
-      <Navbar />
-
       <div className="home_container">
         <div className="box">
           <div className="tagline">
             <h1>Easiest way to use nhentai</h1>
           </div>
-          <form onSubmit={(e) => e.preventDefault()} className="form">
+
+          <form onSubmit={fetchApi} className="form">
             <input
+              ref={buttonRef}
               value={value}
               onChange={(e) => setValue(e.target.value)}
               type="number"
+              required
             />
 
             <div className="buttons">
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.9 }}
-                onClick={fetchApi}
-              >
+              <Button type="submit">
                 <svg
                   viewBox="0 0 24 24"
                   width="24"
@@ -93,12 +126,9 @@ const Home: FC<Props> = () => {
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
                 See Information
-              </motion.button>
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.9 }}
-                onClick={readOnly}
-              >
+              </Button>
+
+              <Button type="button" onClick={read}>
                 <svg
                   viewBox="0 0 24 24"
                   width="24"
@@ -112,21 +142,20 @@ const Home: FC<Props> = () => {
                   <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                 </svg>
-                Read Only
-              </motion.button>
+                Read
+              </Button>
             </div>
           </form>
+
           <AnimatedPresenseFix>{loading && <Loading />}</AnimatedPresenseFix>
 
-          {cardVisible && <Card data={DATA} />}
+          {cardVisible && <Card />}
         </div>
       </div>
 
       <AnimatedPresenseFix>
-        {error && <Error handleClose={() => setError(false)} />}
+        {error && <Error handleClose={() => dispatch(toggleError())} />}
       </AnimatedPresenseFix>
-
-      <Footer />
     </>
   );
 };
