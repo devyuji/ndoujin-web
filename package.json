@@ -1,62 +1,37 @@
 {
-  "name": "ndoujin",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.8.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^14.1.1",
-    "@types/jest": "^27.0.3",
-    "@types/node": "^17.0.35",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.4",
-    "axios": "^0.27.2",
-    "framer-motion": "^6.3.3",
-    "postcss-normalize": "^10.0.1",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-redux": "^8.0.2",
-    "react-router-dom": "6",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.0.3",
-    "web-vitals": "^2.1.2",
-    "workbox-background-sync": "^6.4.2",
-    "workbox-broadcast-update": "^6.4.2",
-    "workbox-cacheable-response": "^6.4.2",
-    "workbox-core": "^6.4.2",
-    "workbox-expiration": "^6.4.2",
-    "workbox-google-analytics": "^6.4.2",
-    "workbox-navigation-preload": "^6.4.2",
-    "workbox-precaching": "^6.4.2",
-    "workbox-range-requests": "^6.4.2",
-    "workbox-routing": "^6.4.2",
-    "workbox-strategies": "^6.4.2",
-    "workbox-streams": "^6.4.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {}
+	"name": "web",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "eslint . && prettier --check .",
+		"format": "prettier --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@types/eslint": "^9.6.0",
+		"autoprefixer": "^10.4.20",
+		"eslint": "^9.7.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.36.0",
+		"globals": "^15.0.0",
+		"prettier": "^3.3.2",
+		"prettier-plugin-svelte": "^3.2.6",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"tailwindcss": "^3.4.9",
+		"typescript": "^5.0.0",
+		"typescript-eslint": "^8.0.0",
+		"vite": "^5.0.3"
+	},
+	"dependencies": {
+		"cheerio": "^1.0.0",
+		"firebase": "^11.0.1"
+	}
 }
