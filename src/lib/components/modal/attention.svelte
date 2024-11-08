@@ -10,6 +10,8 @@
 </script>
 
 <Backdrop {onClose}>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		transition:fly={{ y: 10, opacity: 0, duration: 250 }}
 		class="p-4 text-lg font-medium bg-zinc-900 rounded-lg w-11/12 lg:w-96 grid gap-4"
@@ -32,8 +34,8 @@
 			</button>
 		</div>
 
-		<p>
-			This script will only work if the server does not use Cloudflare or similar protections that
+		<p class="text-center">
+			This website will only work if the server does not use Cloudflare or similar protections that
 			block automated requests.
 		</p>
 	</div>

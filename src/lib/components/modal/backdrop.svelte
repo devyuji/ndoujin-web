@@ -16,8 +16,10 @@
 	let { children, onClose }: PropsType = $props();
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	transition:fade={{ duration: 550 }}
+	transition:fade={{ duration: 225 }}
 	onclick={onClose}
 	class="fixed w-full h-full top-0 left-0 right-0 bg-black/50 backdrop-blur-sm z-10 grid place-items-center"
 >

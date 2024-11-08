@@ -57,6 +57,7 @@
 					id="email"
 					bind:value={inputValues.email}
 					class="h-14 p-2 outline-none bg-transparent border-2 border-gray-200 rounded-lg"
+					required
 				/>
 				<label for="password">Password</label>
 				<input
@@ -64,6 +65,7 @@
 					id="password"
 					bind:value={inputValues.password}
 					class="h-14 p-2 outline-none bg-transparent border-2 border-gray-200 rounded-lg"
+					required
 				/>
 
 				{#if !isErrorMessage}

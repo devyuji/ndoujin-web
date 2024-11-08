@@ -4,11 +4,7 @@
 </script>
 
 <Backdrop onClose={() => {}}>
-	<div onclick={(e) => e.stopPropagation()} class="bg-stone-900 text-gray-50 p-6 rounded-lg">
-		<div>
-			<p>Getting data...</p>
-		</div>
-
+	<div onclick={(e) => e.stopPropagation()} class="text-gray-50">
 		<div class="loading_container" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
 			<!-- First SVG Circle with left-right animation -->
 			<svg

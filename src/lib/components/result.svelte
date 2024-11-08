@@ -4,25 +4,61 @@
 	import DoujinData from '$lib/state/details.svelte';
 	import firebase from '$lib/state/firebase.svelte';
 	import { goto } from '$app/navigation';
+	import Reading from './modal/reading.svelte';
+	import Loading from './modal/loading.svelte';
 
 	interface PropsType {
 		data: DetailsType;
 	}
 
+	interface PreviewType {
+		id: string;
+		imageUrl: string[];
+	}
+
 	let { data }: PropsType = $props();
 
-	function read() {
-		const url = `https://nhentai.net/g/${DoujinData.details!.data.id}/1`;
+	let preview = $state<PreviewType>();
+	let loading = $state(false);
+	let show = $state(false);
 
-		(window as any).open(url, '_blank').focus();
-	}
+	async function read() {
+		// const url = `https://nhentai.net/g/${DoujinData.details!.data.id}/1`;
 
-	function download() {
-		if (!firebase.user) {
-			goto('/login');
-			return;
+		// (window as any).open(url, '_blank').focus();
+
+		if (!firebase.user) goto('/login');
+
+		try {
+			if (preview && preview?.id === DoujinData.details?.data.id) {
+				show = true;
+				return;
+			}
+
+			loading = true;
+
+			const options: RequestInit = {
+				method: 'POST',
+				body: JSON.stringify({ id: DoujinData.details?.data.id }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			};
+
+			const res = await fetch('/api/read', options);
+
+			const data = await res.json();
+
+			preview = { id: DoujinData.details?.data.id!, imageUrl: data.data };
+			show = true;
+		} catch (err) {
+			console.log(err);
+		} finally {
+			loading = false;
 		}
 	}
+
+	function download() {}
 </script>
 
 <div class="mt-10 grid gap-4">
@@ -55,7 +91,7 @@
 	</div>
 
 	<div class="flex flex-wrap gap-4">
-		{#each data.tag as tag}
+		{#each data.tag as tag, index (index)}
 			<Tag name={tag} />
 		{/each}
 	</div>
@@ -64,6 +100,23 @@
 	<div class="flex justify-end gap-2">
 		<button class="bg-red-600 px-3 py-2 rounded-md" onclick={read}>Read</button>
 
-		<button class="bg-red-600 px-3 py-2 rounded-md" onclick={download}>Download</button>
+		<button
+			class="bg-red-600 px-3 py-2 rounded-md disabled:bg-red-600/30"
+			disabled
+			onclick={download}>Download</button
+		>
 	</div>
 </div>
+
+{#if loading}
+	<Loading />
+{/if}
+
+{#if show}
+	<Reading
+		images={preview!.imageUrl}
+		onClose={() => {
+			show = false;
+		}}
+	/>
+{/if}
