@@ -7,7 +7,7 @@
 
 	let textColor = $state('text-gray-50');
 
-	const cw = ['rape', 'netorare'];
+	const cw = ['rape', 'netorare', 'cheating'];
 
 	$effect(() => {
 		if (cw.indexOf(name.toLowerCase()) !== -1) {

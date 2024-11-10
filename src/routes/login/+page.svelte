@@ -2,6 +2,7 @@
 	import Container from '$lib/components/container.svelte';
 	import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 	import firebase from '$lib/state/firebase.svelte';
+	import {goto} from "$app/navigation";
 
 	let inputValues = $state({
 		email: '',
@@ -19,13 +20,14 @@
 				errorMessage = '';
 			}
 
-			const user = await signInWithEmailAndPassword(
+			await signInWithEmailAndPassword(
 				firebase.auth!,
 				inputValues.email,
 				inputValues.password
 			);
 
-			console.log(user.user);
+			await goto("/")
+
 		} catch (err) {
 			console.error(err);
 

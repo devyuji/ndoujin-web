@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import Backdrop from './backdrop.svelte';
 </script>
 
-<Backdrop onClose={() => {}}>
-	<div onclick={(e) => e.stopPropagation()} class="text-gray-50">
+	<div onclick={e => e.stopPropagation()} class="text-gray-50">
 		<div class="loading_container" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
 			<!-- First SVG Circle with left-right animation -->
 			<svg
@@ -38,7 +36,6 @@
 			</svg>
 		</div>
 	</div>
-</Backdrop>
 
 <style>
 	.loading_container {

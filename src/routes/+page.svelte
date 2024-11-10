@@ -5,6 +5,7 @@
 	import doujinData from '$lib/state/details.svelte';
 	import { fly } from 'svelte/transition';
 	import Result from '$lib/components/result.svelte';
+	import Backdrop from '$lib/components/modal/backdrop.svelte';
 
 	let errorMessage = $state('');
 	let isErrorMessageEmpty = $derived(errorMessage.length == 0);
@@ -61,8 +62,8 @@
 
 			const response = await fetch(`/api/details?code=${code}`, config);
 
-			if (response.status !== 200) {
-				throw Error('api error');
+			if (!response.ok) {
+				throw new Error('api error');
 			}
 
 			const data = await response.json();
@@ -124,5 +125,7 @@
 </main>
 
 {#if loading}
-	<Loading />
+	<Backdrop onClose={() => {}}>
+		<Loading />
+	</Backdrop>
 {/if}

@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { DetailsType } from '$lib/state/details.svelte';
 	import Tag from './tag.svelte';
-	import DoujinData from '$lib/state/details.svelte';
+	import doujinData from '$lib/state/details.svelte';
 	import firebase from '$lib/state/firebase.svelte';
 	import { goto } from '$app/navigation';
 	import Reading from './modal/reading.svelte';
-	import Loading from './modal/loading.svelte';
 
 	interface PropsType {
 		data: DetailsType;
@@ -23,15 +22,11 @@
 	let show = $state(false);
 
 	async function read() {
-		// const url = `https://nhentai.net/g/${DoujinData.details!.data.id}/1`;
-
-		// (window as any).open(url, '_blank').focus();
-
-		if (!firebase.user) goto('/login');
+		if (!firebase.user) await goto('/login');
 
 		try {
-			if (preview && preview?.id === DoujinData.details?.data.id) {
-				show = true;
+			show = true;
+			if (preview && preview?.id === doujinData.details?.data.id) {
 				return;
 			}
 
@@ -39,7 +34,7 @@
 
 			const options: RequestInit = {
 				method: 'POST',
-				body: JSON.stringify({ id: DoujinData.details?.data.id }),
+				body: JSON.stringify({ id: doujinData.details?.data.id }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -49,13 +44,14 @@
 
 			const data = await res.json();
 
-			preview = { id: DoujinData.details?.data.id!, imageUrl: data.data };
+			preview = { id: doujinData.details?.data.id!, imageUrl: data.data };
 			show = true;
 		} catch (err) {
 			console.log(err);
 		} finally {
 			loading = false;
 		}
+
 	}
 
 	function download() {}
@@ -91,7 +87,7 @@
 	</div>
 
 	<div class="flex flex-wrap gap-4">
-		{#each data.tag as tag, index (index)}
+		{#each data.tag as tag (tag)}
 			<Tag name={tag} />
 		{/each}
 	</div>
@@ -108,13 +104,10 @@
 	</div>
 </div>
 
-{#if loading}
-	<Loading />
-{/if}
-
 {#if show}
 	<Reading
-		images={preview!.imageUrl}
+			{loading}
+		images={preview?.imageUrl}
 		onClose={() => {
 			show = false;
 		}}
