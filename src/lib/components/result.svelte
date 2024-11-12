@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { DetailsType } from '$lib/state/details.svelte';
 	import Tag from './tag.svelte';
-	import doujinData from '$lib/state/details.svelte';
+	import DoujinData from '$lib/state/details.svelte';
 	import firebase from '$lib/state/firebase.svelte';
 	import { goto } from '$app/navigation';
 	import Reading from './modal/reading.svelte';
+	import Loading from './modal/loading.svelte';
 
 	interface PropsType {
 		data: DetailsType;
@@ -22,11 +23,11 @@
 	let show = $state(false);
 
 	async function read() {
-		if (!firebase.user) await goto('/login');
+		if (!firebase.user) goto('/login');
 
 		try {
 			show = true;
-			if (preview && preview?.id === doujinData.details?.data.id) {
+			if (preview && preview?.id === DoujinData.details?.data.id) {
 				return;
 			}
 
@@ -34,7 +35,7 @@
 
 			const options: RequestInit = {
 				method: 'POST',
-				body: JSON.stringify({ id: doujinData.details?.data.id }),
+				body: JSON.stringify({ id: DoujinData.details?.data.id }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -44,14 +45,12 @@
 
 			const data = await res.json();
 
-			preview = { id: doujinData.details?.data.id!, imageUrl: data.data };
-			show = true;
+			preview = { id: DoujinData.details?.data.id!, imageUrl: data.data };
 		} catch (err) {
 			console.log(err);
 		} finally {
 			loading = false;
 		}
-
 	}
 
 	function download() {}
@@ -87,7 +86,7 @@
 	</div>
 
 	<div class="flex flex-wrap gap-4">
-		{#each data.tag as tag (tag)}
+		{#each data.tag as tag, index (index)}
 			<Tag name={tag} />
 		{/each}
 	</div>
@@ -106,8 +105,8 @@
 
 {#if show}
 	<Reading
-			{loading}
-		images={preview?.imageUrl}
+		{loading}
+		images={preview!.imageUrl}
 		onClose={() => {
 			show = false;
 		}}
