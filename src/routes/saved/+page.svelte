@@ -28,7 +28,7 @@
 			<p class="text-center">loading...</p>
 		{/if}
 
-		<div class="grid grid-cols-4">
+		<div class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
 			{#each data as d (d.code)}
 				<SavedCard data={d} />
 			{/each}

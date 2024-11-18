@@ -50,6 +50,10 @@ class IDB {
 		]);
 	}
 
+	isPresent(code: string) {
+		this.db?.get('saved', code);
+	}
+
 	private cleanData<T>(data: T) {
 		return JSON.parse(JSON.stringify(data));
 	}

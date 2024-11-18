@@ -3,7 +3,7 @@
 	import doujinData from '$lib/state/details.svelte.js';
 	import ImagePreview from '$lib/components/modal/imagePreview.svelte';
 	import Loading from '$lib/components/modal/loading.svelte';
-	import Db from '$lib/state/db.svelte';
+	import db from '$lib/state/db.svelte';
 
 	interface PropsType {
 		images: string[];
@@ -28,7 +28,7 @@
 				cover: images[0]
 			};
 
-			await Db.add(d);
+			await db.add(d);
 		} catch (err) {
 			console.log(err);
 		}
@@ -63,7 +63,14 @@
 				</button>
 
 				<div class="flex items-center gap-4">
-					<button type="button" onclick={savedToDB}>Save</button>
+					{#await db.isPresent(doujinData.details!.data.id)}
+						<div></div>
+					{:then data}
+						{#if data === undefined || data === null}
+							<button type="button" onclick={savedToDB}>Save</button>
+						{/if}
+					{/await}
+
 					<button aria-label="open in website" onclick={openWebsite}>
 						<svg
 							viewBox="0 0 24 24"
