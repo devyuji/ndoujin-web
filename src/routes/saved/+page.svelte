@@ -14,11 +14,15 @@
 	});
 
 	async function fetchData() {
-		const d = await db.getAll();
+		try {
+			const d = await db.getAll();
 
-		data = d;
-
-		loading = false;
+			data = d;
+		} catch (err) {
+			console.log(err);
+		} finally {
+			loading = false;
+		}
 	}
 </script>
 
@@ -28,7 +32,7 @@
 			<p class="text-center">loading...</p>
 		{/if}
 
-		<div class="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
+		<div class="grid gap-6 lg:grid-cols-4 md:grid-cols-3 grid-cols-2">
 			{#each data as d (d.code)}
 				<SavedCard data={d} />
 			{/each}

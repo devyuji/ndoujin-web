@@ -13,6 +13,8 @@
 
 	let { images, onClose, loading }: PropsType = $props();
 
+	let showSavedBtn = $state(true);
+
 	function openWebsite() {
 		const url = `https://nhentai.net/g/${doujinData.details!.data.id}/1`;
 
@@ -29,6 +31,8 @@
 			};
 
 			await db.add(d);
+
+			showSavedBtn = false;
 		} catch (err) {
 			console.log(err);
 		}
@@ -63,13 +67,15 @@
 				</button>
 
 				<div class="flex items-center gap-4">
-					{#await db.isPresent(doujinData.details!.data.id)}
-						<div></div>
-					{:then data}
-						{#if data === undefined || data === null}
-							<button type="button" onclick={savedToDB}>Save</button>
-						{/if}
-					{/await}
+					{#if showSavedBtn}
+						{#await db.isPresent(doujinData.details!.data.id)}
+							<div></div>
+						{:then data}
+							{#if data === undefined || data === null}
+								<button type="button" onclick={savedToDB}>Save</button>
+							{/if}
+						{/await}
+					{/if}
 
 					<button aria-label="open in website" onclick={openWebsite}>
 						<svg

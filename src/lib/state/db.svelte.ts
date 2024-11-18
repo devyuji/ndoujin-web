@@ -42,6 +42,13 @@ class IDB {
 
 		const tx = this.db.transaction('saved', 'readwrite');
 
+		tx.onabort = function (event: any) {
+			const error = event.target!.error; // DOMException
+			if (error.name == 'QuotaExceededError') {
+				alert('memorry full');
+			}
+		};
+
 		await Promise.all([
 			tx.store.add({
 				...this.cleanData(data)
@@ -51,7 +58,7 @@ class IDB {
 	}
 
 	isPresent(code: string) {
-		this.db?.get('saved', code);
+		return this.db?.get('saved', code);
 	}
 
 	private cleanData<T>(data: T) {
