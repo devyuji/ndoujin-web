@@ -5,7 +5,6 @@
 	import firebase from '$lib/state/firebase.svelte';
 	import { goto } from '$app/navigation';
 	import Reading from './modal/reading.svelte';
-	import Loading from './modal/loading.svelte';
 
 	interface PropsType {
 		data: DetailsType;
@@ -23,7 +22,10 @@
 	let show = $state(false);
 
 	async function read() {
-		if (!firebase.user) goto('/login');
+		if (!firebase.user) {
+			await goto('/login');
+			return;
+		}
 
 		try {
 			show = true;

@@ -33,6 +33,7 @@
 	"dependencies": {
 		"cheerio": "^1.0.0",
 		"firebase": "^11.0.1",
+		"idb": "^8.0.0",
 		"sse.js": "^2.5.0"
 	}
 }

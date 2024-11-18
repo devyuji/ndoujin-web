@@ -18,7 +18,7 @@
 
 <div class="w-full h-full bg-zinc-700">
 	<div
-		class={`h-[50rem] w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}
+		class={`h-[60rem] w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}
 	>
 		{#if errorMessage}
 			<button aria-label="retry"
