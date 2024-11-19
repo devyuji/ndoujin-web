@@ -71,7 +71,7 @@
 						{#await db.isPresent(doujinData.details!.data.id)}
 							<div></div>
 						{:then data}
-							{#if data === undefined || data === null}
+							{#if !data}
 								<button type="button" onclick={savedToDB}>Save</button>
 							{/if}
 						{/await}

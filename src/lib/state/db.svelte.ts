@@ -75,7 +75,8 @@ class IDB {
 	}
 
 	isPresent(code: string) {
-		return this.data.find((e) => e.code === code) !== undefined;
+		const result = this.data.find((e) => e.code === code) !== undefined;
+		return result;
 	}
 
 	private cleanData<T>(data: T) {
