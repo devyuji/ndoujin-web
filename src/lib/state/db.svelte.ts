@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { openDB, type IDBPDatabase } from 'idb';
 
 export interface SavedType {
@@ -10,6 +11,9 @@ export interface SavedType {
 class IDB {
 	db: IDBPDatabase | null = null;
 	loading = $state(true);
+
+	data = $state<SavedType[]>([]);
+	isDataEmpty = $derived(this.data.length === 0);
 
 	async init() {
 		this.db = await openDB('ndouijn', 1, {
@@ -34,7 +38,7 @@ class IDB {
 	async getAll() {
 		if (!this.db) return [];
 
-		return this.db.getAll('saved');
+		this.data = await this.db.getAll('saved');
 	}
 
 	async add(data: SavedType) {
@@ -55,10 +59,23 @@ class IDB {
 			}),
 			tx.done
 		]);
+
+		this.data.push(this.cleanData(data));
+	}
+
+	async delete(code: string) {
+		if (!this.db) throw new Error('db not initialize');
+
+		const tx = this.db.transaction('saved', 'readwrite');
+
+		await Promise.all([tx.store.delete(code), tx.done]);
+
+		// Delete it from the data also
+		this.data = this.data.filter((e) => e.code !== code);
 	}
 
 	isPresent(code: string) {
-		return this.db?.get('saved', code);
+		return this.data.find((e) => e.code === code) !== undefined;
 	}
 
 	private cleanData<T>(data: T) {

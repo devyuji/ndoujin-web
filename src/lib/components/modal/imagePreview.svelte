@@ -9,19 +9,12 @@
 	let errorMessage = $state('');
 
 	let imageEle: HTMLImageElement;
-
-	function retry() {
-		imageEle.src = '';
-		imageEle.src = image;
-	}
 </script>
 
-<div class="w-full h-full bg-zinc-700">
-	<div
-		class={`h-[60rem] w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}
-	>
+<div class="w-full h-full bg-zinc-700 relative">
+	<div class={`h-96 w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}>
 		{#if errorMessage}
-			<button aria-label="retry"
+			<!-- <button aria-label="retry"
 				><svg
 					viewBox="0 0 24 24"
 					width="24"
@@ -35,7 +28,7 @@
 						d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
 					></path></svg
 				></button
-			>
+			> -->
 			<p class="text-center">{errorMessage}</p>
 		{:else}
 			<span>
