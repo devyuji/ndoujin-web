@@ -82,7 +82,7 @@
 <main class="grid place-items-center">
 	<Container class="mt-10">
 		<div>
-			<h1 class="text-5xl font-medium text-center">Easiest way to use Nhentai!</h1>
+			<h1 class="sm:text-5xl text-3xl font-medium text-center">Easiest way to use Nhentai!</h1>
 		</div>
 
 		<form

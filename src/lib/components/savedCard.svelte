@@ -77,5 +77,5 @@
 	</button>
 </div>
 {#if openReader}
-	<Reading loading={false} images={data.imageUrls} onClose={close} />
+	<Reading loading={false} images={data.imageUrls} onClose={close} code={data.code} />
 {/if}

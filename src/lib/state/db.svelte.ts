@@ -70,13 +70,15 @@ class IDB {
 
 		await Promise.all([tx.store.delete(code), tx.done]);
 
-		// Delete it from the data also
+		// Delete it from the state also
 		this.data = this.data.filter((e) => e.code !== code);
 	}
 
 	isPresent(code: string) {
-		const result = this.data.find((e) => e.code === code) !== undefined;
-		return result;
+		console.log(code);
+		const result = this.data.find((e) => e.code === code);
+		console.log(result);
+		return result === undefined;
 	}
 
 	private cleanData<T>(data: T) {

@@ -9,27 +9,39 @@
 	let errorMessage = $state('');
 
 	let imageEle: HTMLImageElement;
+
+	function retry() {
+		imageLoaded = false;
+		imageEle.src = '';
+		imageEle.src = `${image}?timestamp=${new Date().getTime()}`;
+
+		imageEle.onload = () => (imageLoaded = true);
+	}
 </script>
 
 <div class="w-full h-full bg-zinc-700 relative">
-	<div class={`h-96 w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}>
+	<div
+		class={`h-[40rem] w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}
+	>
 		{#if errorMessage}
-			<!-- <button aria-label="retry"
-				><svg
-					viewBox="0 0 24 24"
-					width="24"
-					height="24"
-					stroke="currentColor"
-					stroke-width="2"
-					fill="none"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					><polyline points="23 4 23 10 17 10"></polyline><path
-						d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
-					></path></svg
-				></button
-			> -->
-			<p class="text-center">{errorMessage}</p>
+			<div class="flex flex-col gap-2 items-center justify-center">
+				<button aria-label="retry" onclick={retry}
+					><svg
+						viewBox="0 0 24 24"
+						width="24"
+						height="24"
+						stroke="currentColor"
+						stroke-width="2"
+						fill="none"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						><polyline points="23 4 23 10 17 10"></polyline><path
+							d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"
+						></path></svg
+					></button
+				>
+				<p class="text-center">{errorMessage}</p>
+			</div>
 		{:else}
 			<span>
 				<svg
@@ -51,7 +63,7 @@
 	</div>
 	<img
 		alt=""
-		class="w-full h-full object-contain"
+		class={`w-full h-full object-contain ${imageLoaded ? '' : 'hidden'}`}
 		onerror={() => (errorMessage = 'image not loaded')}
 		onload={() => (imageLoaded = true)}
 		src={image}
