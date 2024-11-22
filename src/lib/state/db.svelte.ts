@@ -13,6 +13,7 @@ class IDB {
 	loading = $state(true);
 
 	data = $state<SavedType[]>([]);
+	isFetch = $state(false);
 	isDataEmpty = $derived(this.data.length === 0);
 
 	async init() {
@@ -33,12 +34,14 @@ class IDB {
 		});
 
 		this.loading = false;
+		await this.getAll();
 	}
 
 	async getAll() {
 		if (!this.db) return [];
 
 		this.data = await this.db.getAll('saved');
+		this.isFetch = true;
 	}
 
 	async add(data: SavedType) {
@@ -75,9 +78,7 @@ class IDB {
 	}
 
 	isPresent(code: string) {
-		console.log(code);
 		const result = this.data.find((e) => e.code === code);
-		console.log(result);
 		return result === undefined;
 	}
 

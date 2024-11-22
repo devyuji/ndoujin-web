@@ -13,7 +13,7 @@
 
 	async function fetchData() {
 		try {
-			if (db.isDataEmpty) {
+			if (!db.isFetch) {
 				await db.getAll();
 			}
 		} catch (err) {

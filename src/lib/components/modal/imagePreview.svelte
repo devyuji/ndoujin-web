@@ -11,6 +11,7 @@
 	let imageEle: HTMLImageElement;
 
 	function retry() {
+		errorMessage = "";
 		imageLoaded = false;
 		imageEle.src = '';
 		imageEle.src = `${image}?timestamp=${new Date().getTime()}`;
