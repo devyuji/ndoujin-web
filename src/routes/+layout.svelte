@@ -2,8 +2,8 @@
 	import Footer from '$lib/components/footer.svelte';
 	import Navbar from '$lib/components/navbar.svelte';
 	import type { Snippet } from 'svelte';
-	import '../app.css';
 	import IndexedDB from '$lib/state/db.svelte';
+	import '../app.css';
 
 	interface PropsType {
 		children: Snippet;
