@@ -47,7 +47,7 @@
 		<Loading />
 	{:else}
 		<div
-			class="lg:w-[60rem] w-full h-full overflow-hidden flex flex-col bg-zinc-800"
+			class="lg:w-240 w-full h-full overflow-hidden flex flex-col bg-zinc-800"
 			onclick={(e) => e.stopPropagation()}
 		>
 			<div class="flex items-center justify-between gap-2 px-3 py-4">

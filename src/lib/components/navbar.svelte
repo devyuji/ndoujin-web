@@ -37,12 +37,11 @@
 						>
 					</button>
 				</li>
-
 				<li>
-					<a href="/saved">saved</a>
+					<a href="/reader">reader</a>
 				</li>
 				<li>
-					<a href="/login">login</a>
+					<a href="/saved">saved</a>
 				</li>
 			</ul>
 		</nav>

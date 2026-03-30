@@ -41,7 +41,7 @@
 </script>
 
 <main class="grid place-items-center">
-	<Container width="md:max-w-[35rem]">
+	<Container width="md:max-w-140">
 		{#if firebase.user}
 			<div class="grid place-items-center gap-6">
 				<h1 class="text-2xl font-semibold">Already logged in</h1>

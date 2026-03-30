@@ -11,7 +11,7 @@
 	let imageEle: HTMLImageElement;
 
 	function retry() {
-		errorMessage = "";
+		errorMessage = '';
 		imageLoaded = false;
 		imageEle.src = '';
 		imageEle.src = `${image}?timestamp=${new Date().getTime()}`;
@@ -20,9 +20,9 @@
 	}
 </script>
 
-<div class="w-full h-full bg-zinc-700 relative">
+<div class="w-full h-full bg-zinc-900 relative">
 	<div
-		class={`h-[40rem] w-full bg-zinc-700 grid place-items-center ${imageLoaded ? 'hidden' : ''}`}
+		class={`h-60 w-full bg-zinc-900 animate-pulse grid place-items-center ${imageLoaded ? 'hidden' : ''}`}
 	>
 		{#if errorMessage}
 			<div class="flex flex-col gap-2 items-center justify-center">
@@ -55,7 +55,7 @@
 					></circle>
 					<path
 						class="opacity-75"
-						fill="currentColor"
+						fill="#ffffff"
 						d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
 					></path>
 				</svg>

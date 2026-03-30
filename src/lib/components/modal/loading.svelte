@@ -2,40 +2,40 @@
 	import { fade } from 'svelte/transition';
 </script>
 
-	<div onclick={e => e.stopPropagation()} class="text-gray-50">
-		<div class="loading_container" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
-			<!-- First SVG Circle with left-right animation -->
-			<svg
-				viewBox="0 0 24 24"
-				width="24"
-				height="24"
-				stroke="currentColor"
-				stroke-width="2"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<circle cx="12" cy="12" r="10"></circle>
-			</svg>
+<div class="text-gray-50">
+	<div class="loading_container" transition:fade={{ duration: 150 }}>
+		<!-- First SVG Circle with left-right animation -->
+		<svg
+			viewBox="0 0 24 24"
+			width="24"
+			height="24"
+			stroke="currentColor"
+			stroke-width="2"
+			fill="none"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<circle cx="12" cy="12" r="10"></circle>
+		</svg>
 
-			<!-- Second SVG with multiple circles, moving in opposite direction -->
-			<svg
-				class="icon"
-				viewBox="0 0 24 24"
-				width="24"
-				height="24"
-				stroke="currentColor"
-				stroke-width="2"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<circle cx="12" cy="12" r="1"></circle>
-				<circle cx="19" cy="12" r="1"></circle>
-				<circle cx="5" cy="12" r="1"></circle>
-			</svg>
-		</div>
+		<!-- Second SVG with multiple circles, moving in opposite direction -->
+		<svg
+			class="icon"
+			viewBox="0 0 24 24"
+			width="24"
+			height="24"
+			stroke="currentColor"
+			stroke-width="2"
+			fill="none"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<circle cx="12" cy="12" r="1"></circle>
+			<circle cx="19" cy="12" r="1"></circle>
+			<circle cx="5" cy="12" r="1"></circle>
+		</svg>
 	</div>
+</div>
 
 <style>
 	.loading_container {
