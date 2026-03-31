@@ -121,6 +121,15 @@
 		{#if doujinData.details?.hasData}
 			<Result data={doujinData.details?.data} />
 		{/if}
+
+		<div class="mt-4 text-center">
+			<p class="text-xl">
+				Download the CLI for faster download from <a
+					href="https://github.com/devyuji/ndoujin-cli"
+					class="text-red-600">Github</a
+				>.
+			</p>
+		</div>
 	</Container>
 </main>
 
