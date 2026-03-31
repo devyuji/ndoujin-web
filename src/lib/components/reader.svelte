@@ -45,20 +45,21 @@
 	function next() {
 		if (idx === data.length - 1) return;
 
-		scrollUp();
 		idx = idx + 1;
+		scrollUp();
 	}
 
 	function prev() {
 		if (idx === 0) return;
 
-		scrollUp();
 		idx = idx - 1;
+		scrollUp();
 	}
 
 	function scrollUp() {
 		element?.scrollTo({
-			top: 0
+			top: 0,
+			behavior: 'smooth'
 		});
 	}
 </script>
@@ -69,7 +70,6 @@
 		{#each [data[idx]] as img}
 			<div class="relative">
 				<img
-					transition:fade={{ duration: 120 }}
 					src={URL.createObjectURL(img.image)}
 					alt={img.name}
 					loading="lazy"
