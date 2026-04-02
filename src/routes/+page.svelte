@@ -79,6 +79,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>ndoujin</title>
+</svelte:head>
+
 <main class="grid place-items-center">
 	<Container class="mt-10">
 		<div>

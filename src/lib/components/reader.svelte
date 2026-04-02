@@ -20,6 +20,7 @@
 
 		return () => {
 			window.removeEventListener('keydown', keyPressed);
+
 			document.body.style.overflow = 'auto';
 		};
 	});
@@ -28,14 +29,20 @@
 		const key = e.key;
 
 		switch (key) {
+			case 'Q':
+			case 'q':
 			case 'Escape':
 				onClose();
 				break;
 
+			case 'D':
+			case 'd':
 			case 'ArrowRight':
 				next();
 				break;
 
+			case 'A':
+			case 'a':
 			case 'ArrowLeft':
 				prev();
 				break;

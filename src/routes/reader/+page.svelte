@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { goto, pushState } from '$app/navigation';
+	import { pushState } from '$app/navigation';
 	import { page } from '$app/state';
 	import Container from '$lib/components/container.svelte';
 	import ImagePreview from '$lib/components/modal/imagePreview.svelte';
 	import Loading from '$lib/components/modal/loading.svelte';
 	import Reader from '$lib/components/reader.svelte';
 	import jszip from 'jszip';
-	import { setContext } from 'svelte';
+	import { setContext, type Snippet } from 'svelte';
 
 	interface Image {
 		image: Blob;
@@ -15,12 +15,23 @@
 
 	let file = $state<FileList>();
 	let images = $state<Image[]>([]);
+	let imagesLength = $derived(images.length);
+	let img: HTMLButtonElement[] = $derived(new Array(imagesLength));
 	let loading = $state(false);
-	let toggleReader = $state(false);
 	let imageIndex = $state(0);
 
 	$effect(() => {
 		setContext('reader-data', images);
+	});
+
+	$effect(() => {
+		if (imageIndex > 0) {
+			img[imageIndex].scrollTo({
+				behavior: 'instant'
+			});
+
+			console.log('here');
+		}
 	});
 
 	async function submit() {
@@ -78,19 +89,19 @@
 	function openReading(index: number) {
 		imageIndex = index;
 
-		// goto(`/reader/view?index=${index}`);
-
 		pushState('', {
 			readerModal: true
 		});
 	}
 
 	function closeReading() {
-		toggleReader = false;
-
 		history.back();
 	}
 </script>
+
+{#snippet Tracking(children: Snippet)}
+	{@render children()}
+{/snippet}
 
 <svelte:head>
 	<title>Web Comic Reader - cbz</title>
@@ -106,7 +117,7 @@
 				multiple={false}
 				accept=".cbz"
 				type="file"
-				class="w-full p-4 text-center"
+				class="w-full p-6 text-center"
 			/>
 		</div>
 
@@ -118,6 +129,7 @@
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
 				{#each images as data, index (index)}
 					<button
+						bind:this={img[index]}
 						type="button"
 						onclick={() => openReading(index)}
 						class="border-none hover:scale-105 transition-transform cursor-pointer"
