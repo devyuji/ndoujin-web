@@ -24,6 +24,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Saved - ndoujin</title>
+</svelte:head>
+
 <main class="grid place-items-center">
 	<Container>
 		{#if loading}

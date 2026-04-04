@@ -40,6 +40,9 @@
 				<li>
 					<a href="/reader">reader</a>
 				</li>
+				<li>
+					<a href="/saved">saved</a>
+				</li>
 			</ul>
 		</nav>
 	</Container>

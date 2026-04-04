@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import { fade } from 'svelte/transition';
 
 	interface Props {
 		index: number;
 		onClose: () => void;
 	}
 
-	let { index, onClose }: Props = $props();
+	let { index = $bindable(), onClose }: Props = $props();
 
-	let idx = $state(index);
 	let element = $state<HTMLDivElement>();
 
 	const data: any = getContext('reader-data') ?? [];
@@ -50,23 +48,23 @@
 	}
 
 	function next() {
-		if (idx === data.length - 1) return;
+		if (index === data.length - 1) return;
 
-		idx = idx + 1;
+		index = index + 1;
 		scrollUp();
 	}
 
 	function prev() {
-		if (idx === 0) return;
+		if (index === 0) return;
 
-		idx = idx - 1;
+		index = index - 1;
 		scrollUp();
 	}
 
 	function scrollUp() {
 		element?.scrollTo({
 			top: 0,
-			behavior: 'smooth'
+			behavior: 'instant'
 		});
 	}
 </script>
@@ -74,7 +72,7 @@
 <!-- Backdrop  -->
 <div class="fixed top-0 right-0 left-0 z-10 grid h-full w-full place-items-center bg-black">
 	<div bind:this={element} class="overflow-y-auto xl:w-300 w-full px-2 h-full grid">
-		{#each [data[idx]] as img}
+		{#each [data[index]] as img}
 			<div class="relative">
 				<img
 					src={URL.createObjectURL(img.image)}
@@ -102,5 +100,9 @@
 				</button>
 			</div>
 		{/each}
+	</div>
+
+	<div>
+		<p>{index + 1} / {data.length}</p>
 	</div>
 </div>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	interface PropsType {
 		image: string;
+		name?: string;
 	}
 
-	let { image }: PropsType = $props();
+	let { image, name }: PropsType = $props();
 
 	let imageLoaded = $state(false);
 	let errorMessage = $state('');
@@ -63,7 +64,7 @@
 		{/if}
 	</div>
 	<img
-		alt=""
+		alt={name}
 		class={`w-full h-full object-contain ${imageLoaded ? '' : 'hidden'}`}
 		onerror={() => (errorMessage = 'image not loaded')}
 		onload={() => (imageLoaded = true)}

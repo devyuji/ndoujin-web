@@ -7,6 +7,7 @@
 	import Reader from '$lib/components/reader.svelte';
 	import jszip from 'jszip';
 	import { setContext, type Snippet } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	interface Image {
 		image: Blob;
@@ -15,25 +16,12 @@
 
 	let file = $state<FileList>();
 	let images = $state<Image[]>([]);
-	let imagesLength = $derived(images.length);
-	let img: HTMLButtonElement[] = $derived(new Array(imagesLength));
 	let loading = $state(false);
 	let imageIndex = $state(0);
 
 	$effect(() => {
 		setContext('reader-data', images);
 	});
-
-	$effect(() => {
-		if (imageIndex > 0) {
-			img[imageIndex].scrollTo({
-				behavior: 'instant'
-			});
-
-			console.log('here');
-		}
-	});
-
 	async function submit() {
 		const f = await file?.item(0)?.arrayBuffer();
 
@@ -83,7 +71,9 @@
 			console.log(err);
 		}
 
-		loading = false;
+		setTimeout(() => {
+			loading = false;
+		}, 10);
 	}
 
 	function openReading(index: number) {
@@ -104,7 +94,7 @@
 {/snippet}
 
 <svelte:head>
-	<title>Web Comic Reader - cbz</title>
+	<title>Web Comic Reader - ndoujin</title>
 	<meta name="description" content="Read comic book reader by just uploading cbz file to it." />
 </svelte:head>
 
@@ -122,19 +112,18 @@
 		</div>
 
 		{#if loading}
-			<div class="text-center">
+			<div transition:fade={{ duration: 250 }} class="text-center">
 				<Loading />
 			</div>
 		{:else}
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
 				{#each images as data, index (index)}
 					<button
-						bind:this={img[index]}
 						type="button"
 						onclick={() => openReading(index)}
 						class="border-none hover:scale-105 transition-transform cursor-pointer"
 					>
-						<ImagePreview image={URL.createObjectURL(data.image)} />
+						<ImagePreview image={URL.createObjectURL(data.image)} name={data.name} />
 					</button>
 				{/each}
 			</div>
@@ -143,5 +132,5 @@
 </main>
 
 {#if page.state.readerModal}
-	<Reader index={imageIndex} onClose={closeReading} />
+	<Reader bind:index={imageIndex} onClose={closeReading} />
 {/if}

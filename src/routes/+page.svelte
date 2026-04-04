@@ -80,7 +80,7 @@
 </script>
 
 <svelte:head>
-	<title>ndoujin</title>
+	<title>Easiest way to use nhentai - ndoujin</title>
 </svelte:head>
 
 <main class="grid place-items-center">
