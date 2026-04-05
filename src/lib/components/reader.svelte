@@ -70,7 +70,9 @@
 </script>
 
 <!-- Backdrop  -->
-<div class="fixed top-0 right-0 left-0 z-10 grid h-full w-full place-items-center bg-black">
+<div
+	class="fixed top-0 right-0 left-0 z-10 flex flex-col h-full w-full place-items-center bg-black"
+>
 	<div bind:this={element} class="overflow-y-auto xl:w-300 w-full px-2 h-full grid">
 		{#each [data[index]] as img}
 			<div class="relative">

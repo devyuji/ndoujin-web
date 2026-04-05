@@ -24,7 +24,6 @@ export const GET: RequestHandler = async (props) => {
 		const res = await fetch(url, options);
 
 		if (res.status !== 200) {
-			console.log(res.headers);
 			throw error(500);
 		}
 
