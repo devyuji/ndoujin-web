@@ -33,6 +33,34 @@
 	});
 
 	$effect(() => {
+		if (settings.layout === 'horizontal') return;
+
+		let observation: IntersectionObserver;
+
+		tick().then(() => {
+			observation = new IntersectionObserver(
+				(e) => {
+					if (e[0].isIntersecting) {
+						let element = e[0].target;
+						let elementIndex = element.getAttribute('data-index');
+
+						if (elementIndex) {
+							index = Number.parseInt(elementIndex);
+						}
+					}
+				},
+				{
+					threshold: 0.2
+				}
+			);
+
+			for (let i = 0; i < data.length; i++) {
+				observation.observe(imageTracking[i]);
+			}
+		});
+	});
+
+	$effect(() => {
 		document.body.style.overflow = 'hidden';
 		window.addEventListener('keydown', keyPressed);
 		element?.addEventListener('scroll', closeSettingWhenUsing);
@@ -178,7 +206,7 @@
 	<!-- floating menu -->
 	<div class="py-1 flex flex-col items-center">
 		<div class="flex items-center gap-4">
-			<p>{settings.layout === 'horizontal' ? `${index + 1} /` : ''} {data.length}</p>
+			<p>{index + 1} / {data.length}</p>
 			<button onclick={toggleSetting} type="button" class="cursor-pointer" aria-label="setting">
 				<svg
 					viewBox="0 0 24 24"
