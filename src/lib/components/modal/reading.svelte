@@ -68,15 +68,6 @@
 				</button>
 
 				<div class="flex items-center gap-4">
-					<!-- {#if showSavedBtn}
-						{#await db.isPresent(doujinData.details!.data.id)}
-							<div></div>
-						{:then data}
-							{#if !data}
-								<button type="button" onclick={savedToDB}>Save</button>
-							{/if}
-						{/await}
-					{/if} -->
 					{#if db.isPresent(code ?? doujinData.details?.data.id!)}
 						<button type="button" onclick={savedToDB}>Save</button>
 					{/if}

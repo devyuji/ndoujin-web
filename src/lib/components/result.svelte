@@ -2,7 +2,6 @@
 	import type { DetailsType } from '$lib/state/details.svelte';
 	import Tag from './tag.svelte';
 	import DoujinData from '$lib/state/details.svelte';
-	import firebase from '$lib/state/firebase.svelte';
 	import { goto } from '$app/navigation';
 	import Reading from './modal/reading.svelte';
 
@@ -22,11 +21,6 @@
 	let show = $state(false);
 
 	async function read() {
-		if (!firebase.user) {
-			await goto('/login');
-			return;
-		}
-
 		try {
 			show = true;
 			if (preview && preview?.id === DoujinData.details?.data.id) {
@@ -54,8 +48,6 @@
 			loading = false;
 		}
 	}
-
-	function download() {}
 </script>
 
 <div class="mt-10 grid gap-4">
@@ -96,12 +88,6 @@
 	<!-- action button  -->
 	<div class="flex justify-end gap-2">
 		<button class="bg-red-600 px-3 py-2 rounded-md" onclick={read}>Read</button>
-
-		<button
-			class="bg-red-600 px-3 py-2 rounded-md disabled:bg-red-600/30"
-			disabled
-			onclick={download}>Download</button
-		>
 	</div>
 </div>
 

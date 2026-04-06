@@ -5,8 +5,9 @@
 	import ImagePreview from '$lib/components/modal/imagePreview.svelte';
 	import Loading from '$lib/components/modal/loading.svelte';
 	import Reader from '$lib/components/reader.svelte';
+	import type { Setting } from '$lib/types/settings';
 	import jszip from 'jszip';
-	import { setContext, type Snippet } from 'svelte';
+	import { setContext } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	interface Image {
@@ -18,10 +19,24 @@
 	let images = $state<Image[]>([]);
 	let loading = $state(false);
 	let imageIndex = $state(0);
+	let settings = $state<Setting>({
+		layout: 'horizontal'
+	});
+
+	$effect(() => {
+		const s = localStorage.getItem('reader-setting');
+
+		if (!s) {
+			localStorage.setItem('reader-setting', JSON.stringify(settings));
+		}
+
+		settings = JSON.parse(s!);
+	});
 
 	$effect(() => {
 		setContext('reader-data', images);
 	});
+
 	async function submit() {
 		const f = await file?.item(0)?.arrayBuffer();
 
@@ -89,13 +104,9 @@
 	}
 </script>
 
-{#snippet Tracking(children: Snippet)}
-	{@render children()}
-{/snippet}
-
 <svelte:head>
 	<title>Web Comic Reader - ndoujin</title>
-	<meta name="description" content="Read comic book reader by just uploading cbz file to it." />
+	<meta name="description" content="Read comic book online by just uploading cbz file to it." />
 </svelte:head>
 
 <main class="grid place-items-center">
@@ -132,5 +143,5 @@
 </main>
 
 {#if page.state.readerModal}
-	<Reader bind:index={imageIndex} onClose={closeReading} />
+	<Reader bind:settings bind:index={imageIndex} onClose={closeReading} />
 {/if}
