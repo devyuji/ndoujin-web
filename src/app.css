@@ -1,5 +1,38 @@
 @import 'tailwindcss';
 
-body {
-    font-family: "Montserrat", sans-serif;
+@layer base {
+	:root {
+		--sb-track-color: #232e33;
+		--sb-thumb-color: #e6db85;
+		--sb-size: 7px;
+	}
+
+	html {
+		scrollbar-width: var(--sb-size);
+		scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+	}
+
+	body {
+		font-family: 'Montserrat', sans-serif;
+	}
+
+	html::-webkit-scrollbar {
+		width: var(--sb-size);
+	}
+
+	html::-webkit-scrollbar-track {
+		background: var(--sb-track-color);
+		border-radius: 3px;
+	}
+
+	html::-webkit-scrollbar-thumb {
+		background: var(--sb-thumb-color);
+		border-radius: 3px;
+	}
+
+	@supports not selector(::-webkit-scrollbar) {
+		html {
+			scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+		}
+	}
 }

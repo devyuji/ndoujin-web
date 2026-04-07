@@ -13,15 +13,12 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 	try {
 		const url = `https://nhentai.net/g/${code}`;
 
-		const cookie =
-			'csrftoken=TuPHJ6a5kt7qM7YHU1r4NUUyCVitslPj; cf_clearance=1et44z35D1qvP2r.JJExqRy_xI6N5Abw6iU_6SoYKwM-1775467584-1.2.1.1-OmVGyj02PsZ.dTVGuv65tKX.zSomJPG7wXeQXZ65rjn98OGJTZRGLWbUOjxk.oGJI.zRN0cfQCEFRf_1MZh9DUpmyIAYY4x9FFVwOuxxBKZg2ggd4RBjoSrGDJcEK.Nsj6tYexTl6iEuizLi31FLuMAdr5Hpo5GDQ79JD.K58NGB7mx2iA0z8nXG8ul0SULpjn_WNRXShpY0Ao5v5TxHfSplWbCF9P8wDAZ9o6miXCJtypVTfIGmstoiMUFqVYX1i4Spa4g9f1Ovlcnj8yUWPCeVzGpTLRwXKArpsc2NsW6wPBiJ9qyZhqc0FqJhkmijtxLi5h4yWUQLT87cSWb6nQ';
-
 		const options: RequestInit = {
 			method: 'GET',
 			headers: {
 				'User-Agent':
 					'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:149.0) Gecko/20100101 Firefox/149.0',
-				Cookie: cookie
+				Cookie: ''
 			},
 			keepalive: true,
 			credentials: 'omit'
