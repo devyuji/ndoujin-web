@@ -1,5 +1,3 @@
 ## ND - Easiest Way To Use Nhentai
 
-# Check out the [app](https://github.com/devyuji/ndoujin-app)
-
-[server - repository](https://github.com/devyuji/ndoujin-server)
+# Check out the [CLI](https://github.com/devyuji/ndoujin-cli) for faster download and bypass cloudflare.
