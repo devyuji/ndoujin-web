@@ -1,15 +1,23 @@
 @import 'tailwindcss';
 
+@theme {
+	--color-gray-darker: #1f1f1f;
+}
+
 @layer base {
 	:root {
 		--sb-track-color: #232e33;
 		--sb-thumb-color: #e6db85;
-		--sb-size: 7px;
+		--sb-size: 5px;
 	}
 
 	html {
 		scrollbar-width: var(--sb-size);
 		scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+	}
+
+	button {
+		cursor: pointer;
 	}
 
 	body {

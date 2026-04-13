@@ -2,6 +2,7 @@
 	import type { Setting } from '$lib/types/settings';
 	import { getContext, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
+	import ImagePreview from './modal/imagePreview.svelte';
 
 	interface Props {
 		index: number;
@@ -16,6 +17,7 @@
 
 	const data: any = getContext('reader-data') ?? [];
 	const imageTracking: HTMLDivElement[] = $state(new Array(data.length));
+	const totalPage: number = $derived(data.length);
 
 	// scrolling to image when layout in vertical
 	$effect(() => {
@@ -32,6 +34,7 @@
 		});
 	});
 
+	// Keep track of srolling page number
 	$effect(() => {
 		if (settings.layout === 'horizontal') return;
 
@@ -73,6 +76,24 @@
 		};
 	});
 
+	// auto scroll goes to next chapter
+	$effect(() => {
+		let interval;
+		if (!settings.autoScroll) return;
+
+		if (index === totalPage - 1) {
+			if (interval) clearInterval(interval);
+		}
+
+		interval = setInterval(() => {
+			next();
+		}, settings.autoScrollTime * 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
+
 	function keyPressed(e: KeyboardEvent) {
 		const key = e.key;
 
@@ -98,8 +119,9 @@
 	}
 
 	function next() {
-		if (index === data.length - 1) return;
+		if (index === totalPage - 1) return;
 		if (settings.layout === 'vertical') return;
+		closeSettingWhenUsing();
 
 		index = index + 1;
 		scrollUp();
@@ -108,6 +130,7 @@
 	function prev() {
 		if (index === 0) return;
 		if (settings.layout === 'vertical') return;
+		closeSettingWhenUsing();
 
 		index = index - 1;
 		scrollUp();
@@ -142,12 +165,13 @@
 {#snippet grid()}
 	{#each [data[index]] as img (index)}
 		<div class="relative">
-			<img
+			<!-- <img
 				src={URL.createObjectURL(img.image)}
 				alt={img.name}
 				loading="lazy"
 				class="size-full object-contain block"
-			/>
+			/> -->
+			<ImagePreview image={URL.createObjectURL(img.image)} name={img.name} />
 
 			<!-- next button  -->
 			<button
@@ -174,12 +198,7 @@
 	<div class="space-y-4">
 		{#each data as img, idx (idx)}
 			<div data-index={idx} class="min-h-50 sm:min-h-100" bind:this={imageTracking[idx]}>
-				<img
-					src={URL.createObjectURL(img.image)}
-					alt={img.name}
-					class="w-full object-contain block"
-					loading="lazy"
-				/>
+				<ImagePreview image={URL.createObjectURL(img.image)} name={img.name} />
 			</div>
 		{/each}
 	</div>
@@ -207,7 +226,7 @@
 	<div class="py-1 flex flex-col items-center">
 		<div class="flex items-center gap-4">
 			<p>{index + 1} / {data.length}</p>
-			<button onclick={toggleSetting} type="button" class="cursor-pointer" aria-label="setting">
+			<!-- <button onclick={toggleSetting} type="button" class="cursor-pointer" aria-label="setting">
 				<svg
 					viewBox="0 0 24 24"
 					width="15"
@@ -221,16 +240,16 @@
 						d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
 					></path></svg
 				>
-			</button>
+			</button> -->
 		</div>
 
 		<!-- settings  -->
 		{#if showSettings}
 			<div
 				transition:fly={{ y: 10, duration: 250 }}
-				class="absolute bottom-10 z-109 p-4 rounded-xl right bg-gray-900"
+				class="absolute bottom-10 z-109 p-4 rounded-xl right bg-gray-darker"
 			>
-				<ul>
+				<ul class="space-y-2">
 					<li>
 						<button onclick={changeLayout} type="button" class="flex gap-1 items-center">
 							Layout: {settings.layout}
@@ -250,6 +269,22 @@
 								>
 							</span>
 						</button>
+					</li>
+
+					<li class="flex items-center w-full">
+						<span>
+							<p id="autoscroll">Auto Scroll</p>
+						</span>
+
+						<span class="ml-auto">
+							<input
+								bind:checked={settings.autoScroll}
+								disabled={settings.layout === 'vertical'}
+								type="checkbox"
+								name="autoscroll"
+								id="autoscroll"
+							/>
+						</span>
 					</li>
 				</ul>
 			</div>

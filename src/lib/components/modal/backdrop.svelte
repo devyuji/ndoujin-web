@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { twMerge } from 'tailwind-merge';
 
 	interface PropsType {
 		children: Snippet;
+		class?: string;
 		onClose: () => void;
 	}
 
@@ -13,11 +15,11 @@
 		return () => (document.body.style.overflow = 'visible');
 	});
 
-	let { children, onClose }: PropsType = $props();
+	let { children, class: className, onClose }: PropsType = $props();
 
 	function keyPress(e: KeyboardEvent) {
 		if (e.code === 'Escape') {
-			onClose()
+			onClose();
 		}
 	}
 </script>
@@ -29,7 +31,9 @@
 <div
 	transition:fade={{ duration: 225 }}
 	onclick={onClose}
-	class="fixed w-full h-full top-0 left-0 right-0 bg-black/50 backdrop-blur-sm z-10 grid place-items-center"
+	class={twMerge(
+		`fixed w-full h-full top-0 left-0 right-0 bg-black/50 backdrop-blur-sm z-10 grid place-items-center ${className}`
+	)}
 >
 	{@render children()}
 </div>
