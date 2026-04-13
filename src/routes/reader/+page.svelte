@@ -27,8 +27,6 @@
 	});
 	let showTopIndicator = $state(false);
 
-	let isImagesEmpty = $derived(images.length === 0);
-
 	$effect(() => {
 		const s = localStorage.getItem('reader-setting');
 

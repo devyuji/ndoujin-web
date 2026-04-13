@@ -206,7 +206,7 @@
 
 <!-- Backdrop  -->
 <div
-	class="fixed top-0 right-0 left-0 z-10 flex flex-col place-items-center h-full w-full bg-black"
+	class="fixed top-0 right-0 left-0 z-10 flex flex-col place-items-center h-full w-full bg-zinc-900"
 >
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
