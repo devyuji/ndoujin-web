@@ -7,6 +7,7 @@
 		children: Snippet;
 		class?: string;
 		onClose: () => void;
+		onKeyPressedClose?: boolean;
 	}
 
 	$effect(() => {
@@ -15,11 +16,13 @@
 		return () => (document.body.style.overflow = 'visible');
 	});
 
-	let { children, class: className, onClose }: PropsType = $props();
+	let { children, class: className, onClose, onKeyPressedClose = true }: PropsType = $props();
 
 	function keyPress(e: KeyboardEvent) {
 		if (e.code === 'Escape') {
-			onClose();
+			if (onKeyPressedClose) {
+				onClose();
+			}
 		}
 	}
 </script>

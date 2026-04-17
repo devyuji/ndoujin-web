@@ -3,6 +3,9 @@
 	import { getContext, tick } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import ImagePreview from './modal/imagePreview.svelte';
+	import { pushState } from '$app/navigation';
+	import { page } from '$app/state';
+	import Settings from './modal/settings.svelte';
 
 	interface Props {
 		index: number;
@@ -66,11 +69,9 @@
 	$effect(() => {
 		document.body.style.overflow = 'hidden';
 		window.addEventListener('keydown', keyPressed);
-		element?.addEventListener('scroll', closeSettingWhenUsing);
 
 		return () => {
 			window.removeEventListener('keydown', keyPressed);
-			element?.removeEventListener('scroll', closeSettingWhenUsing);
 
 			document.body.style.overflow = 'auto';
 		};
@@ -121,7 +122,6 @@
 	function next() {
 		if (index === totalPage - 1) return;
 		if (settings.layout === 'vertical') return;
-		closeSettingWhenUsing();
 
 		index = index + 1;
 		scrollUp();
@@ -130,7 +130,6 @@
 	function prev() {
 		if (index === 0) return;
 		if (settings.layout === 'vertical') return;
-		closeSettingWhenUsing();
 
 		index = index - 1;
 		scrollUp();
@@ -153,12 +152,15 @@
 		localStorage.setItem('reader-setting', JSON.stringify(settings));
 	}
 
-	function toggleSetting() {
-		showSettings = !showSettings;
+	function openSettingsModal() {
+		pushState('', {
+			readerModal: true,
+			showSetting: true
+		});
 	}
 
-	function closeSettingWhenUsing() {
-		if (showSettings) toggleSetting();
+	function closeSettingsModal() {
+		history.back();
 	}
 </script>
 
@@ -208,13 +210,7 @@
 <div
 	class="fixed top-0 right-0 left-0 z-10 flex flex-col place-items-center h-full w-full bg-zinc-900"
 >
-	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		bind:this={element}
-		class="overflow-y-auto xl:w-300 size-full px-2 grid"
-		onclick={closeSettingWhenUsing}
-	>
+	<div bind:this={element} class="overflow-y-auto xl:w-300 size-full px-2 grid">
 		{#if settings.layout === 'horizontal'}
 			{@render grid()}
 		{:else}
@@ -226,7 +222,7 @@
 	<div class="py-1 flex flex-col items-center">
 		<div class="flex items-center gap-4">
 			<p>{index + 1} / {data.length}</p>
-			<!-- <button onclick={toggleSetting} type="button" class="cursor-pointer" aria-label="setting">
+			<button onclick={openSettingsModal} type="button" class="cursor-pointer" aria-label="setting">
 				<svg
 					viewBox="0 0 24 24"
 					width="15"
@@ -240,7 +236,7 @@
 						d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
 					></path></svg
 				>
-			</button> -->
+			</button>
 		</div>
 
 		<!-- settings  -->
@@ -291,3 +287,7 @@
 		{/if}
 	</div>
 </div>
+
+{#if page.state.showSetting}
+	<Settings bind:settings />
+{/if}

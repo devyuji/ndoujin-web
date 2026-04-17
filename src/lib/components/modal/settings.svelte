@@ -19,7 +19,7 @@
 	}
 </script>
 
-<Backdrop onClose={closeModal} class="flex justify-center items-end">
+<Backdrop onClose={closeModal} onKeyPressedClose={false} class="flex justify-center items-end">
 	<div
 		transition:fly={{ y: 20, duration: 250, easing: linear }}
 		role="presentation"
