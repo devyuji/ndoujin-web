@@ -8,7 +8,7 @@
 	import type { Setting } from '$lib/types/settings';
 	import jszip from 'jszip';
 	import { setContext } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
 	interface Image {
 		image: Blob;
@@ -17,14 +17,20 @@
 
 	let file = $state<FileList>();
 	let images = $state<Image[]>([]);
+	let totalPages = $derived(images.length);
+	let showDropperZone = $state(false);
+
 	let loading = $state(false);
 	let imageIndex = $state(0);
+
 	let settings = $state<Setting>({
 		layout: 'horizontal',
 		autoScroll: false,
 		autoScrollTime: 5
 	});
 	let showTopIndicator = $state(false);
+
+	const extenstion = ['png', 'jpg', 'webp', 'jpeg'];
 
 	$effect(() => {
 		const s = localStorage.getItem('reader-setting');
@@ -62,13 +68,15 @@
 
 		if (!f) return;
 
+		await processFile(f);
+	}
+
+	async function processFile(data: ArrayBuffer) {
 		loading = true;
 
 		try {
-			const response = await jszip.loadAsync(f);
+			const response = await jszip.loadAsync(data);
 			let allImage: Image[] = [];
-
-			const extenstion = ['png', 'jpg', 'webp', 'jpeg'];
 
 			const imagesLength = Object.keys(response.files).length;
 
@@ -78,7 +86,7 @@
 					const fileName = file.name;
 					const img = await file.async('blob');
 
-					const fileExtension = fileName.split('.').at(-1);
+					const fileExtension = getFileExtension(fileName);
 
 					let a = extenstion.find((ex) => ex === fileExtension);
 
@@ -111,17 +119,19 @@
 		}, 10);
 	}
 
+	function getFileExtension(name: string): string {
+		let n = name.split('.').at(-1);
+
+		if (!n) throw new Error('unable to get extension');
+
+		return n;
+	}
+
 	function openReading(index: number) {
 		imageIndex = index;
 
 		pushState('', {
 			readerModal: true
-		});
-	}
-
-	function openSetting() {
-		pushState('', {
-			showSetting: true
 		});
 	}
 
@@ -135,7 +145,50 @@
 			behavior: 'smooth'
 		});
 	}
+
+	async function onDrop(e: DragEvent) {
+		e.preventDefault();
+
+		showDropperZone = false;
+
+		if (!e.dataTransfer) return;
+
+		const files = [...e.dataTransfer.items].map((item) => item.getAsFile()).filter((file) => file);
+
+		if (files.length < 1) {
+			showDropperZone = false;
+			return;
+		}
+		let fileExtension = getFileExtension(files[0]?.name!);
+
+		if (fileExtension !== 'cbz') {
+			return;
+		}
+
+		const f = await files[0]?.arrayBuffer();
+
+		if (!f) return;
+
+		await processFile(f);
+	}
 </script>
+
+<svelte:window
+	ondrop={onDrop}
+	ondragover={(e) => {
+		if (!e.dataTransfer) return;
+
+		const fileItems = [...e.dataTransfer.items].filter((item) => item.kind === 'file');
+		if (fileItems.length > 0) {
+			e.preventDefault();
+
+			showDropperZone = true;
+		}
+	}}
+	ondragleave={() => {
+		showDropperZone = false;
+	}}
+/>
 
 <svelte:head>
 	<title>Web Comic Reader (CBZ) - ndoujin</title>
@@ -145,21 +198,41 @@
 <main class="grid place-items-center">
 	<Container class="space-y-6">
 		<div class="grid place-items-center border-2 border-dashed border-gray-200 rounded-xl">
-			<input
-				onchange={submit}
-				bind:files={file}
-				multiple={false}
-				accept=".cbz"
-				type="file"
-				class="w-full p-6 text-center"
-			/>
+			<label
+				for="file-upload"
+				class={`w-full p-6 text-center grid place-items-center cursor-pointer ${showDropperZone ? 'h-50 bg-blue-500/50' : ''}`}
+				ondrag={(e) => {
+					if (!e.dataTransfer) return;
+
+					const fileItems = [...e.dataTransfer.items].filter((item) => item.kind === 'file');
+					if (fileItems.length > 0) {
+						e.preventDefault();
+					}
+				}}
+			>
+				Drop CBZ file here, or click to upload.
+				<input
+					id="file-upload"
+					onchange={submit}
+					bind:files={file}
+					multiple={false}
+					accept=".cbz"
+					type="file"
+					class="hidden"
+				/>
+			</label>
 		</div>
 
 		{#if loading}
 			<div transition:fade={{ duration: 250 }} class="text-center">
 				<Loading />
 			</div>
+		{:else if totalPages < 1}
+			<div></div>
 		{:else}
+			<div>
+				<p>Total Pages: {totalPages}</p>
+			</div>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
 				{#each images as data, index (index)}
 					<button
@@ -172,14 +245,15 @@
 				{/each}
 			</div>
 
-			<!-- FAQ scroll to top  -->
+			<!--------------------------------- FAQ scroll to top  ----------------------------->
 			{#if showTopIndicator}
-				<div class="flex justify-end sticky bottom-10 z-5 pointer-events-none">
+				<div class="flex justify-center sticky bottom-10 z-5 pointer-events-none">
 					<button
+						transition:fly={{ y: 10, duration: 220 }}
 						onclick={scrollToTop}
 						type="button"
 						aria-label="scroll top"
-						class="bg-gray-darker rounded-xl p-3 pointer-events-auto"
+						class="bg-gray-darker rounded-xl p-3 pointer-events-auto shadow-[rgba(0,0,0,0.24)_0px_3px_8px]"
 					>
 						<svg
 							viewBox="0 0 24 24"
@@ -194,6 +268,7 @@
 					</button>
 				</div>
 			{/if}
+			<!---------------------------------------- FAQ ------------------------------------------>
 		{/if}
 	</Container>
 </main>
