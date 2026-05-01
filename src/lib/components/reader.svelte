@@ -73,6 +73,7 @@
 		return () => {
 			window.removeEventListener('keydown', keyPressed);
 
+			console.log('overflow back to normal');
 			document.body.style.overflow = 'auto';
 		};
 	});

@@ -8,15 +8,24 @@
 		class?: string;
 		onClose: () => void;
 		onKeyPressedClose?: boolean;
+		triggerOverflowSetting?: boolean;
 	}
 
+	let {
+		children,
+		class: className,
+		onClose,
+		onKeyPressedClose = true,
+		triggerOverflowSetting = true
+	}: PropsType = $props();
+
 	$effect(() => {
-		document.body.style.overflow = 'hidden';
+		if (triggerOverflowSetting) {
+			document.body.style.overflow = 'hidden';
 
-		return () => (document.body.style.overflow = 'visible');
+			return () => (document.body.style.overflow = 'visible');
+		}
 	});
-
-	let { children, class: className, onClose, onKeyPressedClose = true }: PropsType = $props();
 
 	function keyPress(e: KeyboardEvent) {
 		if (e.code === 'Escape') {

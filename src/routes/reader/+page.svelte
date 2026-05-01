@@ -19,7 +19,7 @@
 	let images = $state<Image[]>([]);
 	let totalPages = $derived(images.length);
 	let showDropperZone = $state(false);
-
+	let fileName = $state('');
 	let loading = $state(false);
 	let imageIndex = $state(0);
 
@@ -30,7 +30,7 @@
 	});
 	let showTopIndicator = $state(false);
 
-	const extenstion = ['png', 'jpg', 'webp', 'jpeg'];
+	const supportedExtenstion = ['png', 'jpg', 'webp', 'jpeg'];
 
 	$effect(() => {
 		const s = localStorage.getItem('reader-setting');
@@ -68,6 +68,8 @@
 
 		if (!f) return;
 
+		fileName = file?.item(0)?.name!;
+
 		await processFile(f);
 	}
 
@@ -88,7 +90,7 @@
 
 					const fileExtension = getFileExtension(fileName);
 
-					let a = extenstion.find((ex) => ex === fileExtension);
+					let a = supportedExtenstion.find((ex) => ex === fileExtension);
 
 					if (a) {
 						allImage.push({
@@ -147,9 +149,9 @@
 	}
 
 	async function onDrop(e: DragEvent) {
-		e.preventDefault();
-
 		showDropperZone = false;
+
+		e.preventDefault();
 
 		if (!e.dataTransfer) return;
 
@@ -164,6 +166,8 @@
 		if (fileExtension !== 'cbz') {
 			return;
 		}
+
+		fileName = files[0]?.name!;
 
 		const f = await files[0]?.arrayBuffer();
 
@@ -185,9 +189,6 @@
 			showDropperZone = true;
 		}
 	}}
-	ondragleave={() => {
-		showDropperZone = false;
-	}}
 />
 
 <svelte:head>
@@ -198,10 +199,10 @@
 <main class="grid place-items-center">
 	<Container class="space-y-6">
 		<div class="grid place-items-center border-2 border-dashed border-gray-200 rounded-xl">
-			<label
-				for="file-upload"
-				class={`w-full p-6 text-center grid place-items-center cursor-pointer ${showDropperZone ? 'h-50 bg-blue-500/50' : ''}`}
-				ondrag={(e) => {
+			<div
+				role="presentation"
+				ondrop={onDrop}
+				ondragover={(e) => {
 					if (!e.dataTransfer) return;
 
 					const fileItems = [...e.dataTransfer.items].filter((item) => item.kind === 'file');
@@ -209,28 +210,38 @@
 						e.preventDefault();
 					}
 				}}
+				ondragleave={() => {
+					showDropperZone = false;
+				}}
+				class="size-full"
 			>
-				Drop CBZ file here, or click to upload.
-				<input
-					id="file-upload"
-					onchange={submit}
-					bind:files={file}
-					multiple={false}
-					accept=".cbz"
-					type="file"
-					class="hidden"
-				/>
-			</label>
+				<label
+					for="file-upload"
+					class={`w-full p-6 text-center grid place-items-center cursor-pointer ${showDropperZone ? 'h-50 bg-blue-500/50 ' : ''}`}
+				>
+					Drop CBZ file here, or click to upload.
+					<input
+						id="file-upload"
+						onchange={submit}
+						bind:files={file}
+						multiple={false}
+						accept=".cbz"
+						type="file"
+						class="hidden"
+					/>
+				</label>
+			</div>
 		</div>
 
 		{#if loading}
-			<div transition:fade={{ duration: 250 }} class="text-center">
+			<div transition:fade={{ duration: 150 }} class="text-center">
 				<Loading />
 			</div>
 		{:else if totalPages < 1}
 			<div></div>
 		{:else}
-			<div>
+			<div class="space-y-1">
+				<p class="text-lg capitalize">{fileName}</p>
 				<p>Total Pages: {totalPages}</p>
 			</div>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
