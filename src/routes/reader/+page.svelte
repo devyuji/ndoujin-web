@@ -48,10 +48,30 @@
 	});
 
 	$effect(() => {
+		if ('launchQueue' in window) {
+			window.launchQueue.setConsumer(async (launchParams) => {
+				if (launchParams.files && launchParams.files.length) {
+					const data = await launchParams.files[0].getFile();
+
+					fileName = removeFileExtension(data.name);
+
+					await processFile(data);
+				}
+			});
+		}
+	});
+
+	$effect(() => {
 		window.addEventListener('scroll', scrollDetect);
 
 		return () => window.removeEventListener('scroll', scrollDetect);
 	});
+
+	function removeFileExtension(name: string): string {
+		const n = name.split('.');
+
+		return n[0];
+	}
 
 	function scrollDetect() {
 		const sy = window.scrollY;
@@ -68,12 +88,12 @@
 
 		if (!f) return;
 
-		fileName = file?.item(0)?.name!;
+		fileName = removeFileExtension(file?.item(0)?.name!);
 
 		await processFile(f);
 	}
 
-	async function processFile(data: ArrayBuffer) {
+	async function processFile(data: ArrayBuffer | Blob) {
 		loading = true;
 
 		try {
@@ -167,7 +187,7 @@
 			return;
 		}
 
-		fileName = files[0]?.name!;
+		fileName = removeFileExtension(files[0]?.name!);
 
 		const f = await files[0]?.arrayBuffer();
 
@@ -241,7 +261,7 @@
 			<div></div>
 		{:else}
 			<div class="space-y-1">
-				<p class="text-lg capitalize">{fileName}</p>
+				<p class="text-lg font-semibold uppercase">{fileName}</p>
 				<p>Total Pages: {totalPages}</p>
 			</div>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">

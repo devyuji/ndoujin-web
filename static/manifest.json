@@ -3,6 +3,15 @@
 	"name": "ndoujin",
 	"short_name": "ndoujin",
 	"description": "Easiest way to use nhentai.net",
+	"file_handlers": [
+		{
+			"action": "/reader",
+			"accept": {
+				"application/vnd.comicbook+zip": [".cbz"],
+				"application/x-cbz": [".cbz"]
+			}
+		}
+	],
 	"icons": [
 		{
 			"src": "/icons/logo192.png",
