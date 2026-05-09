@@ -6,6 +6,7 @@
 	import { pushState } from '$app/navigation';
 	import { page } from '$app/state';
 	import Settings from './modal/settings.svelte';
+	import PageSlider from './modal/pageSlider.svelte';
 
 	interface Props {
 		index: number;
@@ -16,7 +17,6 @@
 	let { index = $bindable(), settings = $bindable(), onClose }: Props = $props();
 
 	let element: HTMLDivElement;
-	let showSettings = $state(false);
 
 	const data: any = getContext('reader-data') ?? [];
 	const imageTracking: HTMLDivElement[] = $state(new Array(data.length));
@@ -143,25 +143,11 @@
 		});
 	}
 
-	function changeLayout() {
-		if (settings.layout === 'vertical') {
-			settings.layout = 'horizontal';
-		} else {
-			settings.layout = 'vertical';
-		}
-
-		localStorage.setItem('reader-setting', JSON.stringify(settings));
-	}
-
 	function openSettingsModal() {
 		pushState('', {
 			readerModal: true,
 			showSetting: true
 		});
-	}
-
-	function closeSettingsModal() {
-		history.back();
 	}
 </script>
 
@@ -222,7 +208,15 @@
 	<!-- floating menu -->
 	<div class="py-1 flex flex-col items-center">
 		<div class="flex items-center gap-4">
-			<p>{index + 1} / {data.length}</p>
+			<button
+				type="button"
+				onclick={() => {
+					pushState('', {
+						readerModal: true,
+						showPageSlider: true
+					});
+				}}>{index + 1} / {data.length}</button
+			>
 			<button onclick={openSettingsModal} type="button" class="cursor-pointer" aria-label="setting">
 				<svg
 					viewBox="0 0 24 24"
@@ -239,56 +233,13 @@
 				>
 			</button>
 		</div>
-
-		<!-- settings  -->
-		{#if showSettings}
-			<div
-				transition:fly={{ y: 10, duration: 250 }}
-				class="absolute bottom-10 z-109 p-4 rounded-xl right bg-gray-darker"
-			>
-				<ul class="space-y-2">
-					<li>
-						<button onclick={changeLayout} type="button" class="flex gap-1 items-center">
-							Layout: {settings.layout}
-
-							<span>
-								<svg
-									viewBox="0 0 24 24"
-									width="16"
-									height="16"
-									stroke="currentColor"
-									stroke-width="2"
-									fill="none"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									><polyline points="7 13 12 18 17 13"></polyline><polyline points="7 6 12 11 17 6"
-									></polyline></svg
-								>
-							</span>
-						</button>
-					</li>
-
-					<li class="flex items-center w-full">
-						<span>
-							<p id="autoscroll">Auto Scroll</p>
-						</span>
-
-						<span class="ml-auto">
-							<input
-								bind:checked={settings.autoScroll}
-								disabled={settings.layout === 'vertical'}
-								type="checkbox"
-								name="autoscroll"
-								id="autoscroll"
-							/>
-						</span>
-					</li>
-				</ul>
-			</div>
-		{/if}
 	</div>
 </div>
 
 {#if page.state.showSetting}
 	<Settings bind:settings />
+{/if}
+
+{#if page.state.showPageSlider}
+	<PageSlider {totalPage} bind:index />
 {/if}

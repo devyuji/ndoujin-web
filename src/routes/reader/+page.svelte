@@ -261,8 +261,8 @@
 			<div></div>
 		{:else}
 			<div class="space-y-1">
-				<p class="text-lg font-semibold uppercase">{fileName}</p>
-				<p>Total Pages: {totalPages}</p>
+				<p class="font-semibold uppercase">{fileName}</p>
+				<p class="text-sm">Total Pages: {totalPages}</p>
 			</div>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
 				{#each images as data, index (index)}

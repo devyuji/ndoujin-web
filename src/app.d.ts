@@ -8,6 +8,7 @@ declare global {
 		interface PageState {
 			readerModal?: boolean;
 			showSetting?: boolean;
+			showPageSlider?: boolean;
 		}
 		// interface Platform {}
 	}
